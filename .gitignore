@@ -1,11 +1,3 @@
-#.gradle
-#/local.properties
-/.idea/workspace.xml
-/.idea/libraries
-.DS_Store
-#/build
-#/captures
-
 # Built application files
 *.apk
 *.ap_
@@ -25,6 +17,10 @@ gen/
 build/
 */build/
 
+# IntelliJ files
+.idea
+*.iml
+
 # Local configuration file (sdk path, etc)
 local.properties
 
@@ -39,3 +35,6 @@ proguard/
 
 # Android Studio captures folder
 captures/
+
+# OSX files
+.DS_Store
