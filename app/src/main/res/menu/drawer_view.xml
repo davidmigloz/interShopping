@@ -2,25 +2,25 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <group android:checkableBehavior="single">
-        <item
+        <Item
             android:id="@+id/nav_home"
             android:icon="@drawable/ic_dashboard"
             android:title="@string/home"
             android:checked="true" />
-        <item
+        <Item
             android:id="@+id/nav_discussion"
             android:icon="@drawable/ic_forum"
             android:title="@string/help" />
     </group>
 
-    <item android:title="@string/help_us">
+    <Item android:title="@string/help_us">
         <menu>
-            <item
+            <Item
                 android:icon="@drawable/ic_dashboard"
                 android:title="@string/rate" />
-            <item
+            <Item
                 android:icon="@drawable/ic_forum"
                 android:title="@string/tell_friend" />
         </menu>
-    </item>
+    </Item>
 </menu>

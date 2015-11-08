@@ -12,11 +12,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 import bendavid.is.intershopping.R;
-import bendavid.is.intershopping.entities.Supermarket;
+import bendavid.is.intershopping.database.SList;
+import bendavid.is.intershopping.entities.SupermarketEntity;
 
 public class SupermarketListFragment extends Fragment {
 
@@ -30,9 +33,21 @@ public class SupermarketListFragment extends Fragment {
     }
 
     private void setupRecyclerView(RecyclerView recyclerView) {
+
+        // Get Supermarkets
+//        List<SList> sList = SList.findWithQuery(SList.class, "Select distinct supermarked from Slist");
+        List<SList> sList = SList.listAll(SList.class);
+        List<String> supermarkedList = new ArrayList<String>();
+        for (SList shopoflist : sList) {
+            if (!supermarkedList.contains(shopoflist.supermarked))
+                supermarkedList.add(shopoflist.supermarked);
+        }
+
         recyclerView.setLayoutManager(new LinearLayoutManager(recyclerView.getContext()));
         recyclerView.setAdapter(new SimpleStringRecyclerViewAdapter(getActivity(),
-                Arrays.asList(Supermarket.supermarketsNames)));
+                supermarkedList));
+//        recyclerView.setAdapter(new SimpleStringRecyclerViewAdapter(getActivity(),
+//                Arrays.asList(SupermarketEntity.supermarketsNames)));
     }
 
     public static class SimpleStringRecyclerViewAdapter
@@ -87,7 +102,7 @@ public class SupermarketListFragment extends Fragment {
                 @Override
                 public void onClick(View v) {
                     Toast.makeText(v.getContext(),
-                            "Supermarket Pressed", Toast.LENGTH_SHORT).show();
+                            "SupermarketEntity Pressed", Toast.LENGTH_SHORT).show();
                 }
             });
         }

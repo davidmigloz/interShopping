@@ -2,7 +2,7 @@ package bendavid.is.intershopping.entities;
 
 import java.util.Random;
 
-public class ShoppingList {
+public class ShoppingListEntity {
 
     private static final Random RANDOM = new Random();
 

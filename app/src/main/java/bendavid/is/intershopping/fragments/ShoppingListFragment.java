@@ -18,7 +18,8 @@ import java.util.List;
 import java.util.Random;
 
 import bendavid.is.intershopping.R;
-import bendavid.is.intershopping.entities.ShoppingList;
+import bendavid.is.intershopping.database.SList;
+import bendavid.is.intershopping.entities.ShoppingListEntity;
 
 public class ShoppingListFragment extends Fragment {
 
@@ -32,9 +33,18 @@ public class ShoppingListFragment extends Fragment {
     }
 
     private void setupRecyclerView(RecyclerView recyclerView) {
+//        recyclerView.setAdapter(new SimpleStringRecyclerViewAdapter(getActivity(),
+//                getRandomSublist(ShoppingListEntity.shoppingLists, 30)));
+
+        // Get Supermarkets
+        List<SList> sList = SList.listAll(SList.class);
+        List<String> shoppinglist = new ArrayList<String>();
+        for (SList shoplist : sList) {
+            shoppinglist.add(shoplist.date + ": " + shoplist.supermarked);
+        }
         recyclerView.setLayoutManager(new LinearLayoutManager(recyclerView.getContext()));
         recyclerView.setAdapter(new SimpleStringRecyclerViewAdapter(getActivity(),
-                getRandomSublist(ShoppingList.shoppingLists, 30)));
+                shoppinglist));
     }
 
     private List<String> getRandomSublist(String[] array, int amount) {
