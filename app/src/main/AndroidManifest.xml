@@ -3,23 +3,23 @@
     package="bendavid.is.intershopping">
 
     <application
-        android:name="com.orm.SugarApp"
-        android:allowBackup="true"
-        android:icon="@drawable/ic_shopping_cart"
         android:label="@string/app_name"
-        android:theme="@style/Theme.InterShopping">
+        android:theme="@style/Theme.InterShopping"
+        android:icon="@drawable/ic_shopping_cart"
+        android:allowBackup="true"
+        android:name="com.orm.SugarApp">
         <meta-data
             android:name="DATABASE"
             android:value="intershopping.db" />
         <meta-data
             android:name="VERSION"
-            android:value="2" />
+            android:value="3" />
         <meta-data
             android:name="QUERY_LOG"
             android:value="true" />
         <meta-data
             android:name="DOMAIN_PACKAGE_NAME"
-            android:value="bendavid.is.intershopping" />
+            android:value="bendavid.is.intershopping.entities" />
 
         <activity android:name=".activities.InterShoppingActivity">
             <intent-filter>

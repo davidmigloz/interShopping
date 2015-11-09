@@ -22,12 +22,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import bendavid.is.intershopping.R;
-import bendavid.is.intershopping.database.InitializeDatabase;
-import bendavid.is.intershopping.database.SItem;
-import bendavid.is.intershopping.database.SList;
-import bendavid.is.intershopping.database.SListItem;
 import bendavid.is.intershopping.fragments.ShoppingListFragment;
 import bendavid.is.intershopping.fragments.SupermarketListFragment;
+
+import static bendavid.is.intershopping.database.InitializeDatabase.prepareSampleData;
 
 
 public class InterShoppingActivity extends AppCompatActivity {
@@ -70,47 +68,8 @@ public class InterShoppingActivity extends AppCompatActivity {
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(viewPager);
 
-        // Adding some example entities if DB does not exist.
-        if (SList.count(SList.class, null, null) == 0) {
-            List<SItem> newSItems = new ArrayList<SItem>();
-            newSItems.add(new SItem("Ketchup", "Ketchup"));
-            newSItems.add(new SItem("Potatoes"));
-            newSItems.add(new SItem("Garlic"));
-            newSItems.add(new SItem("Bread"));
-            newSItems.add(new SItem("Pizza"));
-            newSItems.add(new SItem("Pasta"));
-            newSItems.add(new SItem("Milk"));
-            newSItems.add(new SItem("Turkey"));
-            for (SItem sItem : newSItems) {
-                sItem.save();
-            }
-
-            List<SList> newSLists = new ArrayList<SList>();
-            newSLists.add(new SList("08/11/2015", "Biedronka", 40.3));
-            newSLists.add(new SList("25/11/2015", "Auchan", 20.0));
-            newSLists.add(new SList("23/11/2015", "Carrefour Express", 50.9));
-            newSLists.add(new SList("21/11/2015", "Biedronka", 9.5));
-            newSLists.add(new SList("17/11/2015", "Auchan", 88.8));
-            newSLists.add(new SList("09/11/2015", "Carrefour Market", 74.4));
-            newSLists.add(new SList("08/11/2015", "Carrefour Express", 40.3));
-            newSLists.add(new SList("25/11/2015", "Auchan", 20.0));
-            newSLists.add(new SList("23/11/2015", "Biedronka", 50.9));
-            newSLists.add(new SList("21/11/2015", "Auchan", 9.5));
-            newSLists.add(new SList("17/11/2015", "Carrefour Express", 88.8));
-            newSLists.add(new SList("09/11/2015", "just any supermarked", 74.4));
-            for (SList sList : newSLists) {
-                sList.save();
-            }
-
-            List<SListItem> newSListItems = new ArrayList<SListItem>();
-            newSListItems.add(new SListItem(7.7, "perPiece", newSLists.get(0), newSItems.get(0)));
-            newSListItems.add(new SListItem(8.8, "perPiece", newSLists.get(1), newSItems.get(1)));
-            newSListItems.add(new SListItem(4.4, "perPiece", newSLists.get(2), newSItems.get(2)));
-            newSListItems.add(new SListItem(5.5, "perPiece", newSLists.get(3), newSItems.get(3)));
-            for (SListItem newSListItem : newSListItems) {
-                newSListItem.save();
-            }
-        }
+        // Fill database with sample data
+        prepareSampleData();
     }
 
     @Override
@@ -131,7 +90,7 @@ public class InterShoppingActivity extends AppCompatActivity {
 
     private void setupViewPager(ViewPager viewPager) {
         Adapter adapter = new Adapter(getSupportFragmentManager());
-        adapter.addFragment(new ShoppingListFragment(), "ShoppingListEntity");
+        adapter.addFragment(new ShoppingListFragment(), "ShoppingLists");
         adapter.addFragment(new SupermarketListFragment(), "Supermarkets");
         viewPager.setAdapter(adapter);
     }

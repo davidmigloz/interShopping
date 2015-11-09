@@ -1,25 +1,24 @@
 package bendavid.is.intershopping.fragments;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import bendavid.is.intershopping.R;
-import bendavid.is.intershopping.database.SList;
-import bendavid.is.intershopping.entities.SupermarketEntity;
+import bendavid.is.intershopping.entities.Supermarket;
 
 public class SupermarketListFragment extends Fragment {
 
@@ -33,72 +32,57 @@ public class SupermarketListFragment extends Fragment {
     }
 
     private void setupRecyclerView(RecyclerView recyclerView) {
-
         // Get Supermarkets
-//        List<SList> sList = SList.findWithQuery(SList.class, "Select distinct supermarked from Slist");
-        List<SList> sList = SList.listAll(SList.class);
-        List<String> supermarkedList = new ArrayList<String>();
-        for (SList shopoflist : sList) {
-            if (!supermarkedList.contains(shopoflist.supermarked))
-                supermarkedList.add(shopoflist.supermarked);
-        }
+        List<Supermarket> supermarkets = Supermarket.listAll(Supermarket.class);
 
+        // LinearLayoutManager provides a similar implementation to a ListView
         recyclerView.setLayoutManager(new LinearLayoutManager(recyclerView.getContext()));
-        recyclerView.setAdapter(new SimpleStringRecyclerViewAdapter(getActivity(),
-                supermarkedList));
-//        recyclerView.setAdapter(new SimpleStringRecyclerViewAdapter(getActivity(),
-//                Arrays.asList(SupermarketEntity.supermarketsNames)));
+        recyclerView.setAdapter(new SupermarketRecyclerViewAdapter(getActivity(),
+                supermarkets));
     }
 
-    public static class SimpleStringRecyclerViewAdapter
-            extends RecyclerView.Adapter<SimpleStringRecyclerViewAdapter.ViewHolder> {
+    public static class SupermarketRecyclerViewAdapter
+            extends RecyclerView.Adapter<SupermarketRecyclerViewAdapter.ViewHolder> {
 
-        private final TypedValue mTypedValue = new TypedValue();
-        private int mBackground;
-        private List<String> mValues;
+        private Context context;
+        private List<Supermarket> supermarkets;
 
-        public static class ViewHolder extends RecyclerView.ViewHolder {
-            public String mBoundString;
-
-            public final View mView;
-            public final TextView mTextView;
-
-            public ViewHolder(View view) {
-                super(view);
-                mView = view;
-                mTextView = (TextView) view.findViewById(android.R.id.text1);
-            }
-
-            @Override
-            public String toString() {
-                return super.toString() + " '" + mTextView.getText();
-            }
+        public SupermarketRecyclerViewAdapter(Context context, List<Supermarket> items) {
+            this.context = context;
+            supermarkets = items;
         }
 
-        public String getValueAt(int position) {
-            return mValues.get(position);
-        }
-
-        public SimpleStringRecyclerViewAdapter(Context context, List<String> items) {
-            context.getTheme().resolveAttribute(R.attr.selectableItemBackground, mTypedValue, true);
-            mBackground = mTypedValue.resourceId;
-            mValues = items;
-        }
-
+        /**
+         * Number of supermarkets in the list.
+         */
         @Override
-        public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        public int getItemCount() {
+            return supermarkets.size();
+        }
+
+        /**
+         * Gets the ViewHolder used for the item at given position.
+         */
+        @Override
+        public ViewHolder onCreateViewHolder(ViewGroup parent, int position) {
             View view = LayoutInflater.from(parent.getContext())
                     .inflate(R.layout.list_item, parent, false);
-            view.setBackgroundResource(mBackground);
             return new ViewHolder(view);
         }
 
+        /**
+         * It's called when views need to be created from given ViewHolder.
+         */
         @Override
-        public void onBindViewHolder(final ViewHolder holder, int position) {
-            holder.mBoundString = mValues.get(position);
-            holder.mTextView.setText(mValues.get(position));
+        public void onBindViewHolder(final ViewHolder viewHolder, int position) {
+            // Supermarket's icon
+            Drawable icon = ContextCompat.getDrawable(context, R.drawable.ic_event);
+            viewHolder.icon.setImageDrawable(icon);
+            // Supermarket name
+            viewHolder.item_name.setText(supermarkets.get(position).toString());
 
-            holder.mView.setOnClickListener(new View.OnClickListener() {
+            // Listener
+            viewHolder.mView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Toast.makeText(v.getContext(),
@@ -107,9 +91,17 @@ public class SupermarketListFragment extends Fragment {
             });
         }
 
-        @Override
-        public int getItemCount() {
-            return mValues.size();
+        public static class ViewHolder extends RecyclerView.ViewHolder {
+            public final View mView;
+            public ImageView icon;
+            public TextView item_name;
+
+            public ViewHolder(View view) {
+                super(view);
+                mView = view;
+                icon = (ImageView) view.findViewById(R.id.letter_sm);
+                item_name = (TextView) view.findViewById(R.id.item_name);
+            }
         }
     }
 }

@@ -1,25 +1,29 @@
 package bendavid.is.intershopping.fragments;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.util.ArrayList;
+import com.orm.query.Condition;
+import com.orm.query.Select;
+
 import java.util.List;
-import java.util.Random;
 
 import bendavid.is.intershopping.R;
-import bendavid.is.intershopping.database.SList;
-import bendavid.is.intershopping.entities.ShoppingListEntity;
+import bendavid.is.intershopping.entities.ListItem;
+import bendavid.is.intershopping.entities.ShoppingList;
+import bendavid.is.intershopping.entities.Supermarket;
 
 public class ShoppingListFragment extends Fragment {
 
@@ -33,89 +37,83 @@ public class ShoppingListFragment extends Fragment {
     }
 
     private void setupRecyclerView(RecyclerView recyclerView) {
-//        recyclerView.setAdapter(new SimpleStringRecyclerViewAdapter(getActivity(),
-//                getRandomSublist(ShoppingListEntity.shoppingLists, 30)));
+        // Get Shopping lists
+        List<ShoppingList> shoppingLists = ShoppingList.listAll(ShoppingList.class);
 
-        // Get Supermarkets
-        List<SList> sList = SList.listAll(SList.class);
-        List<String> shoppinglist = new ArrayList<String>();
-        for (SList shoplist : sList) {
-            shoppinglist.add(shoplist.date + ": " + shoplist.supermarked);
-        }
+        // LinearLayoutManager provides a similar implementation to a ListView
         recyclerView.setLayoutManager(new LinearLayoutManager(recyclerView.getContext()));
-        recyclerView.setAdapter(new SimpleStringRecyclerViewAdapter(getActivity(),
-                shoppinglist));
+        recyclerView.setAdapter(new ShoppingListRecyclerViewAdapter(getActivity(),
+                shoppingLists));
     }
 
-    private List<String> getRandomSublist(String[] array, int amount) {
-        ArrayList<String> list = new ArrayList<>(amount);
-        Random random = new Random();
-        while (list.size() < amount) {
-            list.add(array[random.nextInt(array.length)]);
-        }
-        return list;
-    }
+    public static class ShoppingListRecyclerViewAdapter
+            extends RecyclerView.Adapter<ShoppingListRecyclerViewAdapter.ViewHolder> {
 
-    public static class SimpleStringRecyclerViewAdapter
-            extends RecyclerView.Adapter<SimpleStringRecyclerViewAdapter.ViewHolder> {
+        private Context context;
+        private List<ShoppingList> shoppingLists;
 
-        private final TypedValue mTypedValue = new TypedValue();
-        private int mBackground;
-        private List<String> mValues;
-
-        public static class ViewHolder extends RecyclerView.ViewHolder {
-            public String mBoundString;
-
-            public final View mView;
-            public final TextView mTextView;
-
-            public ViewHolder(View view) {
-                super(view);
-                mView = view;
-                mTextView = (TextView) view.findViewById(android.R.id.text1);
-            }
-
-            @Override
-            public String toString() {
-                return super.toString() + " '" + mTextView.getText();
-            }
+        public ShoppingListRecyclerViewAdapter(Context context, List<ShoppingList> items) {
+            this.context = context;
+            shoppingLists = items;
         }
 
-        public String getValueAt(int position) {
-            return mValues.get(position);
-        }
-
-        public SimpleStringRecyclerViewAdapter(Context context, List<String> items) {
-            context.getTheme().resolveAttribute(R.attr.selectableItemBackground, mTypedValue, true);
-            mBackground = mTypedValue.resourceId;
-            mValues = items;
-        }
-
+        /**
+         * Number of shopping lists in the list.
+         */
         @Override
-        public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        public int getItemCount() {
+            return shoppingLists.size();
+        }
+
+        /**
+         * Gets the ViewHolder used for the item at given position.
+         */
+        @Override
+        public ViewHolder onCreateViewHolder(ViewGroup parent, int position) {
             View view = LayoutInflater.from(parent.getContext())
                     .inflate(R.layout.list_item, parent, false);
-            view.setBackgroundResource(mBackground);
             return new ViewHolder(view);
         }
 
+        /**
+         * It's called when views need to be created from given ViewHolder.
+         */
         @Override
-        public void onBindViewHolder(final ViewHolder holder, int position) {
-            holder.mBoundString = mValues.get(position);
-            holder.mTextView.setText(mValues.get(position));
+        public void onBindViewHolder(final ViewHolder viewHolder, final int position) {
+            // ShoppingLists's icon
+            Drawable icon = ContextCompat.getDrawable(context, R.drawable.ic_shopping_cart);
+            viewHolder.icon.setImageDrawable(icon);
+            // Supermarket name
+            viewHolder.item_name.setText(shoppingLists.get(position).toString());
 
-            holder.mView.setOnClickListener(new View.OnClickListener() {
+            // Listener
+            viewHolder.mView.setOnClickListener(new View.OnClickListener() {
+                /**
+                 * When you touch one shopping list, the number of items of this list are displayed.
+                 */
                 @Override
                 public void onClick(View v) {
+                    ShoppingList s = shoppingLists.get(position);
+                    List<ListItem> listItems = ListItem.find(ListItem.class,
+                            "shopping_list = ?", s.getId().toString());
                     Toast.makeText(v.getContext(),
-                            "List Pressed", Toast.LENGTH_SHORT).show();
+                            "Buy " + listItems.size() + " items in " + s.getSupermarked(),
+                            Toast.LENGTH_SHORT).show();
                 }
             });
         }
 
-        @Override
-        public int getItemCount() {
-            return mValues.size();
+        public static class ViewHolder extends RecyclerView.ViewHolder {
+            public final View mView;
+            public ImageView icon;
+            public TextView item_name;
+
+            public ViewHolder(View view) {
+                super(view);
+                mView = view;
+                icon = (ImageView) view.findViewById(R.id.letter_sm);
+                item_name = (TextView) view.findViewById(R.id.item_name);
+            }
         }
     }
 }
