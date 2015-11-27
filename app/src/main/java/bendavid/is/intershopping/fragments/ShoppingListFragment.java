@@ -1,6 +1,7 @@
 package bendavid.is.intershopping.fragments;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -8,22 +9,18 @@ import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import com.orm.query.Condition;
-import com.orm.query.Select;
 
 import java.util.List;
 
 import bendavid.is.intershopping.R;
-import bendavid.is.intershopping.entities.ListItem;
+import bendavid.is.intershopping.activities.ShoppingListDetailActivity;
 import bendavid.is.intershopping.entities.ShoppingList;
-import bendavid.is.intershopping.entities.Supermarket;
 
 public class ShoppingListFragment extends Fragment {
 
@@ -89,16 +86,15 @@ public class ShoppingListFragment extends Fragment {
             // Listener
             viewHolder.mView.setOnClickListener(new View.OnClickListener() {
                 /**
-                 * When you touch one shopping list, the number of items of this list are displayed.
+                 * When you touch one shopping list, you move to the detail view.
                  */
                 @Override
                 public void onClick(View v) {
-                    ShoppingList s = shoppingLists.get(position);
-                    List<ListItem> listItems = ListItem.find(ListItem.class,
-                            "shopping_list = ?", s.getId().toString());
-                    Toast.makeText(v.getContext(),
-                            "Buy " + listItems.size() + " items in " + s.getSupermarked(),
-                            Toast.LENGTH_SHORT).show();
+                    ShoppingList sl = shoppingLists.get(position);
+
+                    Intent i = new Intent(context, ShoppingListDetailActivity.class);
+                    i.putExtra("shopping-list-id", sl.getId());
+                    context.startActivity(i);
                 }
             });
         }

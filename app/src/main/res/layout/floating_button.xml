@@ -1,0 +1,10 @@
+<!-- Floating action button -->
+<android.support.design.widget.FloatingActionButton
+    android:id="@+id/fab"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_gravity="end|bottom"
+    android:layout_margin="@dimen/fab_margin"
+    android:src="@drawable/ic_add"
+    />

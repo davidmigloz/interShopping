@@ -21,12 +21,7 @@
             android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
 
             <!-- ActionBar -->
-            <android.support.v7.widget.Toolbar
-                android:id="@+id/toolbar"
-                android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
-                android:background="?attr/colorPrimary"
-                app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
+            <include layout="@layout/action_bar"/>
 
             <!-- Tabs -->
             <android.support.design.widget.TabLayout
@@ -44,24 +39,11 @@
             app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
         <!-- Floating action button -->
-        <android.support.design.widget.FloatingActionButton
-            android:id="@+id/fab"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="end|bottom"
-            android:layout_margin="@dimen/fab_margin"
-            android:src="@drawable/ic_add" />
+        <include layout="@layout/floating_button"/>
 
     </android.support.design.widget.CoordinatorLayout>
 
     <!-- Navigation drawer (menu) that comes from the left -->
-    <android.support.design.widget.NavigationView
-        android:id="@+id/nav_view"
-        android:layout_height="match_parent"
-        android:layout_width="wrap_content"
-        android:layout_gravity="start"
-        android:fitsSystemWindows="true"
-        app:headerLayout="@layout/nav_header"
-        app:menu="@menu/drawer_view"/>
+    <include layout="@layout/left_menu"/>
 
 </android.support.v4.widget.DrawerLayout>

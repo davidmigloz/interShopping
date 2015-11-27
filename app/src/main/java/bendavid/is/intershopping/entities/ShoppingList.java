@@ -2,6 +2,7 @@ package bendavid.is.intershopping.entities;
 
 import com.orm.SugarRecord;
 
+import java.io.Serializable;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -10,7 +11,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 /**
  * Shopping list that contains the items to be bought in a supermarket.
  */
-public class ShoppingList extends SugarRecord {
+public class ShoppingList extends SugarRecord implements Serializable {
     private Date date;
     private Supermarket supermarked;
     private long total_price;

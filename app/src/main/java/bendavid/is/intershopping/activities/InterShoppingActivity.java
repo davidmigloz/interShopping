@@ -72,18 +72,31 @@ public class InterShoppingActivity extends AppCompatActivity {
         prepareSampleData();
     }
 
+    /**
+     * Inflate xml of the menu of the action bar
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.action_settings, menu);
         return true;
     }
 
+    /**
+     * Trigger when an action of the action bar is selected.
+     * @param item selected action
+     * @return
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
                 mDrawerLayout.openDrawer(GravityCompat.START);
                 return true;
+            case R.id.action_settings:
+                Toast.makeText(this,
+                        "Settings not available at the moment", Toast.LENGTH_SHORT).show();
+            default:
+                break;
         }
         return super.onOptionsItemSelected(item);
     }

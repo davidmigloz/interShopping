@@ -2,12 +2,13 @@ package bendavid.is.intershopping.entities;
 
 import com.orm.SugarRecord;
 
+import java.io.Serializable;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * Supermarket where the items of a list are going to be bought.
  */
-public class Supermarket extends SugarRecord {
+public class Supermarket extends SugarRecord implements Serializable {
     private String name;
     private double coord_lat;
     private double coord_lon;

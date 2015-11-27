@@ -25,4 +25,20 @@ public class ListItem extends SugarRecord {
     private enum PriceType {
         MONEY_UNIT, MONEY_KILO
     }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getTranslation() {
+        return translation;
+    }
+
+    public long getPrice() {
+        return price;
+    }
+
+    public PriceType getPriceType() {
+        return priceType;
+    }
 }
