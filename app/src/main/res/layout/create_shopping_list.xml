@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/drawer_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true">
+
+    <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/main_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <android.support.design.widget.AppBarLayout
+            android:id="@+id/appbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+
+            <!-- ActionBar -->
+            <include layout="@layout/action_bar" />
+
+        </android.support.design.widget.AppBarLayout>
+
+        <!-- Body  -->
+        <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="15dp">
+
+
+            <!--<LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:id="@+id/linear_layout"
+                android:layout_alignParentTop="true">
+                <TextView
+                    android:id="@+id/supermarket_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+
+                <TextView
+                    android:id="@+id/items_title"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Items"/>
+            </LinearLayout>
+            <android.support.v7.widget.RecyclerView
+                    android:id="@+id/recyclerview"
+                    xmlns:android="http://schemas.android.com/apk/res/android"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_below="@id/linear_layout"
+                    android:layout_alignParentBottom="true"/>-->
+
+            <EditText
+                android:id="@+id/datefield"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginTop="43dp"
+                android:editable="true"
+                android:ems="10"
+                android:hint="Date (dd/mm/yyyy)"
+                android:inputType="date"
+                android:textColor="@android:color/holo_blue_dark" />
+
+            <TextView
+                android:id="@+id/supermarked_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Supermarked:"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:layout_below="@+id/datefield"
+                android:layout_alignParentStart="true" />
+
+            <Spinner
+                android:id="@+id/supermarkedspinner"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/supermarked_view"
+                android:layout_toEndOf="@+id/supermarked_view" />
+
+
+            <EditText
+                android:id="@+id/itemfield"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_below="@+id/supermarkedspinner"
+                android:layout_toStartOf="@+id/addbtn"
+                android:hint="New Item" />
+
+            <Button
+                android:id="@+id/addbtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/itemfield"
+                android:layout_alignEnd="@+id/datefield"
+                android:text="Add" />
+
+            <ListView
+                android:id="@+id/addedlist"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_below="@+id/itemfield"
+                android:layout_centerHorizontal="true" />
+
+        </RelativeLayout>
+
+        <!-- Floating action button -->
+        <include layout="@layout/floating_button" />
+
+    </android.support.design.widget.CoordinatorLayout>
+
+    <!-- Navigation drawer (menu) that comes from the left -->
+    <include layout="@layout/left_menu" />
+
+</android.support.v4.widget.DrawerLayout>

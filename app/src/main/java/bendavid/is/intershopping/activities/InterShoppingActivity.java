@@ -1,8 +1,10 @@
 package bendavid.is.intershopping.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
+import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -60,17 +62,24 @@ public class InterShoppingActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(getApplicationContext(),
-                        "Action button pressed", Toast.LENGTH_SHORT).show();
+//                if (view.getId() == android.R.id.) {
+                if (true){
+                        Intent intent = new Intent(InterShoppingActivity.this,CreateSListActivity.class);
+                        startActivity(intent);
             }
-        });
-
-        TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
-        tabLayout.setupWithViewPager(viewPager);
-
-        // Fill database with sample data
-        prepareSampleData();
+//            Snackbar.make(view, "Here's a Snackbar", Snackbar.LENGTH_LONG).setAction("Action", null).show();
+//            Toast.makeText(getApplicationContext(), "Action button pressed",Toast.LENGTH_SHORT). show();
+        }
     }
+
+    );
+
+    TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
+    tabLayout.setupWithViewPager(viewPager);
+
+    // Fill database with sample data
+    prepareSampleData();
+}
 
     /**
      * Inflate xml of the menu of the action bar
@@ -83,6 +92,7 @@ public class InterShoppingActivity extends AppCompatActivity {
 
     /**
      * Trigger when an action of the action bar is selected.
+     *
      * @param item selected action
      * @return
      */
@@ -120,32 +130,32 @@ public class InterShoppingActivity extends AppCompatActivity {
                 });
     }
 
-    static class Adapter extends FragmentPagerAdapter {
-        private final List<Fragment> mFragments = new ArrayList<>();
-        private final List<String> mFragmentTitles = new ArrayList<>();
+static class Adapter extends FragmentPagerAdapter {
+    private final List<Fragment> mFragments = new ArrayList<>();
+    private final List<String> mFragmentTitles = new ArrayList<>();
 
-        public Adapter(FragmentManager fm) {
-            super(fm);
-        }
-
-        public void addFragment(Fragment fragment, String title) {
-            mFragments.add(fragment);
-            mFragmentTitles.add(title);
-        }
-
-        @Override
-        public Fragment getItem(int position) {
-            return mFragments.get(position);
-        }
-
-        @Override
-        public int getCount() {
-            return mFragments.size();
-        }
-
-        @Override
-        public CharSequence getPageTitle(int position) {
-            return mFragmentTitles.get(position);
-        }
+    public Adapter(FragmentManager fm) {
+        super(fm);
     }
+
+    public void addFragment(Fragment fragment, String title) {
+        mFragments.add(fragment);
+        mFragmentTitles.add(title);
+    }
+
+    @Override
+    public Fragment getItem(int position) {
+        return mFragments.get(position);
+    }
+
+    @Override
+    public int getCount() {
+        return mFragments.size();
+    }
+
+    @Override
+    public CharSequence getPageTitle(int position) {
+        return mFragmentTitles.get(position);
+    }
+}
 }

@@ -29,6 +29,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".activities.ShoppingListDetailActivity"></activity>
+        <activity android:name=".activities.CreateSListActivity"></activity>
 
     </application>
 
