@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
-import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -40,48 +39,49 @@ public class InterShoppingActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.inter_shopping);
 
+        // Action bar
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
         final ActionBar ab = getSupportActionBar();
         ab.setHomeAsUpIndicator(R.drawable.ic_menu);
         ab.setDisplayHomeAsUpEnabled(true);
 
+        // Left menu
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         if (navigationView != null) {
             setupDrawerContent(navigationView);
         }
 
+        // ViewPager
         ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
         if (viewPager != null) {
             setupViewPager(viewPager);
         }
 
+        // Tabs
+        TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
+        tabLayout.setupWithViewPager(viewPager);
+
+        // Floating action button
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                if (view.getId() == android.R.id.) {
-                if (true){
-                        Intent intent = new Intent(InterShoppingActivity.this,CreateSListActivity.class);
-                        startActivity(intent);
+//              if (view.getId() == android.R.id.) {
+                if (true) {
+                    Intent intent = new Intent(InterShoppingActivity.this, CreateSListActivity.class);
+                    startActivity(intent);
+                }
             }
-//            Snackbar.make(view, "Here's a Snackbar", Snackbar.LENGTH_LONG).setAction("Action", null).show();
-//            Toast.makeText(getApplicationContext(), "Action button pressed",Toast.LENGTH_SHORT). show();
-        }
-    });
-
-        TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
-        tabLayout.setupWithViewPager(viewPager);
+        });
 
         // Fill database with sample data
         InitializeDatabase.initialize();
     }
 
     /**
-     * Inflate xml of the menu of the action bar
+     * Inflate xml of the menu of the action bar.
      */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -91,6 +91,7 @@ public class InterShoppingActivity extends AppCompatActivity {
 
     /**
      * Trigger when an action of the action bar is selected.
+     *
      * @param item selected action
      * @return
      */

@@ -4,11 +4,13 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
-import android.support.design.widget.Snackbar;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -30,24 +32,12 @@ import bendavid.is.intershopping.entities.ListItem;
 import bendavid.is.intershopping.entities.ShoppingList;
 import bendavid.is.intershopping.entities.Supermarket;
 
-/**
- * Created by Benni on 28.11.2015.
- */
 public class CreateSListActivity extends AppCompatActivity {
 
     private DrawerLayout mDrawerLayout;
-    private ActionBar ab;
-    private Button addBtn;
-    private EditText addDate;
-    private EditText addItem;
-
-    private ListView addLV;
-    private ArrayList<String> addItemList, supermarkedList;
-    private ArrayAdapter<String> addAdapter, supermarkedAdapter;
-    private Spinner supermarkedSpinner;
-    private List<Supermarket> smList;
-    private int pos;
-    private boolean supermarkedSelected;
+    private Date date;
+    private Supermarket supermarket;
+    private List<String> newItems;
 
 
     @Override
@@ -58,7 +48,7 @@ public class CreateSListActivity extends AppCompatActivity {
         // Action bar
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        ab = getSupportActionBar();
+        ActionBar ab = getSupportActionBar();
         ab.setHomeAsUpIndicator(R.drawable.ic_arrow_back);
         ab.setDisplayHomeAsUpEnabled(true);
 
@@ -69,55 +59,58 @@ public class CreateSListActivity extends AppCompatActivity {
             setupDrawerContent(navigationView);
         }
 
-        // Show the data of the shopping list
+        // Show form to add shopping list
         showSListAddForm();
     }
 
     private void showSListAddForm() {
-        addBtn = (Button) findViewById(R.id.addbtn);
-        addLV = (ListView) findViewById(R.id.addedlist);
-        addDate = (EditText) findViewById(R.id.datefield);
-        addItem = (EditText) findViewById(R.id.itemfield);
-        supermarkedSpinner = (Spinner) findViewById(R.id.supermarkedspinner);
-        supermarkedSelected = false;
+        ListView addLV = (ListView) findViewById(R.id.addedlist);
+        final EditText dateInput = (EditText) findViewById(R.id.datefield);
+        final Spinner supermarketInput = (Spinner) findViewById(R.id.supermarkedspinner);
+        final EditText itemInput = (EditText) findViewById(R.id.itemfield);
+        Button addBtn = (Button) findViewById(R.id.addbtn);
 
-        supermarkedList = new ArrayList<String>();
-        smList = Supermarket.listAll(Supermarket.class);
+        // Get supermarkets
+        final List<Supermarket> smList = Supermarket.listAll(Supermarket.class);
+        List<String> smNamesList = new ArrayList<String>();
         for (Supermarket sm : smList) {
-            supermarkedList.add(sm.toString());
+            smNamesList.add(sm.toString());
         }
 
-        supermarkedAdapter = new ArrayAdapter<String>(getApplicationContext(), R.layout.add_list_item, supermarkedList);
+        // Supermarket spinner
+        ArrayAdapter<String> supermarkedAdapter = new ArrayAdapter<String>(getApplicationContext(),
+                R.layout.list_item_simple, smNamesList);
         supermarkedAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        supermarkedSpinner.setAdapter(supermarkedAdapter);
+        supermarketInput.setAdapter(supermarkedAdapter);
 
-        supermarkedSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        // Select supermarket
+        supermarketInput.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                pos = position;
-                supermarkedSpinner.setSelection(position);
-                supermarkedSelected = true;
+                supermarket = smList.get(position);
+                supermarketInput.setSelection(position);
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-                supermarkedSelected = false;
             }
         });
 
-        addItemList = new ArrayList<String>();
-        addAdapter = new ArrayAdapter<String>(getApplicationContext(), R.layout.add_list_item, addItemList);
+        // List of new items
+        newItems = new ArrayList<String>();
+        final ArrayAdapter<String> addAdapter = new ArrayAdapter<String>(getApplicationContext(),
+                R.layout.list_item_simple, newItems);
         addLV.setAdapter(addAdapter);
 
-
+        // Add new item
         addBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String text = addItem.getText().toString();
+                String text = itemInput.getText().toString();
                 if (!text.equals("")) {
-                    addItemList.add(text);
+                    newItems.add(text);
                     addAdapter.notifyDataSetChanged();
-                    addItem.setText("");
+                    itemInput.setText("");
                 }
             }
         });
@@ -126,42 +119,71 @@ public class CreateSListActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Date date = dateIsValid();
-                if (supermarkedSelected && !addItemList.isEmpty() && date != null) {
-                    ShoppingList nL = new ShoppingList(date, smList.get(pos));
-                    nL.save();
-                    for (String sml : supermarkedList) {
-                        new ListItem(sml, nL).save();
+                // Get date
+                SimpleDateFormat sdf = new SimpleDateFormat("dd/mm/yyyy");
+                sdf.setLenient(false);
+                try {
+                    //if not valid, it will throw ParseException
+                    date = sdf.parse(dateInput.getText().toString());
+                } catch (ParseException e) {
+                    Toast.makeText(getApplicationContext(),
+                            "Date Format invalid! (dd/mm/yyyy)",
+                            Toast.LENGTH_SHORT).show();
+                }
+
+                if(date != null && supermarket != null && newItems.size() > 0){
+                    ShoppingList newSL = new ShoppingList(date, supermarket);
+                    newSL.save();
+                    for(String item : newItems) {
+                        new ListItem(item, newSL).save();
                     }
-                    Toast.makeText(getApplicationContext(), "New Shopping List saved.", Toast.LENGTH_SHORT).show();
-                    finish();
+                    Toast.makeText(getApplicationContext(),
+                            "New Shopping List saved.", Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(CreateSListActivity.this, InterShoppingActivity.class);
+                    startActivity(intent);
                 } else {
-                    Toast.makeText(getApplicationContext(), "Add at least one Item!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(),
+                            "Fill the inputs", Toast.LENGTH_SHORT).show();
                 }
             }
         });
     }
 
-    private Date dateIsValid() {
-        SimpleDateFormat sdf = new SimpleDateFormat("dd/mm/yyyy");
-        sdf.setLenient(false);
-        Date date;
-        try {
-            //if not valid, it will throw ParseException
-            date = sdf.parse(addDate.getText().toString());
-            System.out.println(date);
-        } catch (ParseException e) {
-
-            Toast.makeText(getApplicationContext(), "Date Format invalid! (dd/mm/yyyy): " + addDate.getText().toString(), Toast.LENGTH_SHORT).show();
-            return null;
-        }
-        return date;
+    /**
+     * Inflate xml of the menu of the action bar.
+     */
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.action_settings, menu);
+        return true;
     }
 
     /**
-     * @param navigationView
+     * Trigger when an action of the action bar is selected.
+     *
+     * @param item selected action
+     * @return
      */
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                Intent intent = new Intent(this, InterShoppingActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
+                break;
+            case R.id.action_settings:
+                Toast.makeText(this,
+                        "Settings not available at the moment", Toast.LENGTH_SHORT).show();
+            default:
+                break;
+        }
+        return super.onOptionsItemSelected(item);
+    }
 
+    /**
+     * Setup left menu.
+     */
     private void setupDrawerContent(NavigationView navigationView) {
         navigationView.setNavigationItemSelectedListener(
                 new NavigationView.OnNavigationItemSelectedListener() {
