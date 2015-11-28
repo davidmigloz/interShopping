@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import bendavid.is.intershopping.R;
+import bendavid.is.intershopping.database.InitializeDatabase;
 import bendavid.is.intershopping.fragments.ShoppingListFragment;
 import bendavid.is.intershopping.fragments.SupermarketListFragment;
 
@@ -70,16 +71,14 @@ public class InterShoppingActivity extends AppCompatActivity {
 //            Snackbar.make(view, "Here's a Snackbar", Snackbar.LENGTH_LONG).setAction("Action", null).show();
 //            Toast.makeText(getApplicationContext(), "Action button pressed",Toast.LENGTH_SHORT). show();
         }
+    });
+
+        TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
+        tabLayout.setupWithViewPager(viewPager);
+
+        // Fill database with sample data
+        InitializeDatabase.initialize();
     }
-
-    );
-
-    TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
-    tabLayout.setupWithViewPager(viewPager);
-
-    // Fill database with sample data
-    prepareSampleData();
-}
 
     /**
      * Inflate xml of the menu of the action bar
@@ -92,7 +91,6 @@ public class InterShoppingActivity extends AppCompatActivity {
 
     /**
      * Trigger when an action of the action bar is selected.
-     *
      * @param item selected action
      * @return
      */
@@ -130,32 +128,32 @@ public class InterShoppingActivity extends AppCompatActivity {
                 });
     }
 
-static class Adapter extends FragmentPagerAdapter {
-    private final List<Fragment> mFragments = new ArrayList<>();
-    private final List<String> mFragmentTitles = new ArrayList<>();
+    static class Adapter extends FragmentPagerAdapter {
+        private final List<Fragment> mFragments = new ArrayList<>();
+        private final List<String> mFragmentTitles = new ArrayList<>();
 
-    public Adapter(FragmentManager fm) {
-        super(fm);
-    }
+        public Adapter(FragmentManager fm) {
+            super(fm);
+        }
 
-    public void addFragment(Fragment fragment, String title) {
-        mFragments.add(fragment);
-        mFragmentTitles.add(title);
-    }
+        public void addFragment(Fragment fragment, String title) {
+            mFragments.add(fragment);
+            mFragmentTitles.add(title);
+        }
 
-    @Override
-    public Fragment getItem(int position) {
-        return mFragments.get(position);
-    }
+        @Override
+        public Fragment getItem(int position) {
+            return mFragments.get(position);
+        }
 
-    @Override
-    public int getCount() {
-        return mFragments.size();
-    }
+        @Override
+        public int getCount() {
+            return mFragments.size();
+        }
 
-    @Override
-    public CharSequence getPageTitle(int position) {
-        return mFragmentTitles.get(position);
+        @Override
+        public CharSequence getPageTitle(int position) {
+            return mFragmentTitles.get(position);
+        }
     }
-}
 }

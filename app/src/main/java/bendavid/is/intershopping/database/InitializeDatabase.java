@@ -11,6 +11,18 @@ import bendavid.is.intershopping.entities.ShoppingList;
 import bendavid.is.intershopping.entities.Supermarket;
 
 public final class InitializeDatabase {
+    private static InitializeDatabase instance = null;
+
+    public InitializeDatabase() {
+    }
+
+    public static void initialize() {
+        if(instance == null) {
+            instance = new InitializeDatabase();
+            prepareSampleData();
+        }
+    }
+
     public static void prepareSampleData() {
         // Delete old data
         ListItem.deleteAll(ListItem.class);
@@ -40,14 +52,14 @@ public final class InitializeDatabase {
         for (int i = 0; i < 10; i++) {
             // Get random supermarket
             Supermarket s = supermarketsList.get(random.nextInt(supermarketsList.size()));
-            ShoppingList sl = new ShoppingList(new Date(), s);
+            ShoppingList sl = new ShoppingList(new Date(random.nextInt()), s);
             sl.save();
             shoppingLists.add(sl);
         }
 
         // Add items to the shopping lists
         for (ShoppingList sl : shoppingLists) {
-            int nItems = random.nextInt(10);
+            int nItems = 5 + random.nextInt(10); // Minimum 5 items
             for (int i = 0; i < nItems; i++) {
                 ListItem it = new ListItem(itemsNames[random.nextInt(itemsNames.length)], sl);
                 it.save();

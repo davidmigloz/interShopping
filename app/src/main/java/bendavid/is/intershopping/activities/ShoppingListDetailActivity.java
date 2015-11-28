@@ -4,22 +4,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
-import android.support.design.widget.TabLayout;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.view.GravityCompat;
-import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -29,7 +21,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import bendavid.is.intershopping.R;
@@ -64,6 +55,9 @@ public class ShoppingListDetailActivity extends AppCompatActivity {
     }
 
 
+    /**
+     * Show the data of the activity (items).
+     */
     private void showShoppingListData() {
         // Get id of the shopping list clicked
         Long shoppingListID = (Long) getIntent().getExtras().getSerializable("shopping-list-id");
@@ -71,18 +65,13 @@ public class ShoppingListDetailActivity extends AppCompatActivity {
         ShoppingList shoppingList = ShoppingList.findById(ShoppingList.class, shoppingListID);
         // Set action bar title
         ab.setTitle(shoppingList.toString());
-
-        // Show supermarket
-        TextView supermarket = (TextView) findViewById(R.id.supermarket_name);
-        supermarket.setText(shoppingList.getSupermarked().toString());
-
         // Show items
         RecyclerView rv = (RecyclerView)findViewById(R.id.recyclerview);
         setupRecyclerView(rv, shoppingListID);
     }
 
     /**
-     * Inflate xml of the menu of the action bar
+     * Inflate xml of the menu of the action bar.
      */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -113,8 +102,7 @@ public class ShoppingListDetailActivity extends AppCompatActivity {
     }
 
     /**
-     *
-     * @param navigationView
+     * Setup left menu.
      */
     private void setupDrawerContent(NavigationView navigationView) {
         navigationView.setNavigationItemSelectedListener(
@@ -176,12 +164,18 @@ public class ShoppingListDetailActivity extends AppCompatActivity {
          */
         @Override
         public void onBindViewHolder(final ViewHolder viewHolder, final int position) {
+            // Item
+            final ListItem li = itemslist.get(position);
             // Icon
-            Drawable icon = ContextCompat.getDrawable(context, R.drawable.ic_add_circle_outline);
+            Drawable icon;
+            if(li.isPurchased()) {
+                icon = ContextCompat.getDrawable(context, R.drawable.ic_check_circle);
+            } else {
+                icon = ContextCompat.getDrawable(context, R.drawable.ic_add_circle_outline);
+            }
             viewHolder.icon.setImageDrawable(icon);
             // Item name
             viewHolder.item_name.setText(itemslist.get(position).getName());
-
             // Listener
             viewHolder.mView.setOnClickListener(new View.OnClickListener() {
                 /**
@@ -189,10 +183,17 @@ public class ShoppingListDetailActivity extends AppCompatActivity {
                  */
                 @Override
                 public void onClick(View v) {
-                    ListItem s = itemslist.get(position);
                     // Change Icon
-                    Drawable icon = ContextCompat.getDrawable(context, R.drawable.ic_check_circle);
+                    Drawable icon;
+                    if(li.isPurchased()) {
+                        li.changeStatus(false);
+                        icon = ContextCompat.getDrawable(context, R.drawable.ic_add_circle_outline);
+                    } else{
+                        li.changeStatus(true);
+                        icon = ContextCompat.getDrawable(context, R.drawable.ic_check_circle);
+                    }
                     viewHolder.icon.setImageDrawable(icon);
+                    li.save();
                 }
             });
         }
