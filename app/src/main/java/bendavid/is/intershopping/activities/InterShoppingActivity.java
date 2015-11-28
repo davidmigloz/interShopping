@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import bendavid.is.intershopping.R;
+import bendavid.is.intershopping.database.InitializeDatabase;
 import bendavid.is.intershopping.fragments.ShoppingListFragment;
 import bendavid.is.intershopping.fragments.SupermarketListFragment;
 
@@ -69,7 +70,7 @@ public class InterShoppingActivity extends AppCompatActivity {
         tabLayout.setupWithViewPager(viewPager);
 
         // Fill database with sample data
-        prepareSampleData();
+        InitializeDatabase.initialize();
     }
 
     /**

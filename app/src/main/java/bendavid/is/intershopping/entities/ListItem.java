@@ -13,6 +13,7 @@ public class ListItem extends SugarRecord {
     private long price;
     private PriceType priceType;
     private ShoppingList shoppingList;
+    private boolean purchased;
 
     public ListItem() {
     }
@@ -20,6 +21,7 @@ public class ListItem extends SugarRecord {
     public ListItem(String name, ShoppingList shoppingList) {
         this.name = name;
         this.shoppingList = shoppingList;
+        this.purchased = false;
     }
 
     private enum PriceType {
@@ -40,5 +42,13 @@ public class ListItem extends SugarRecord {
 
     public PriceType getPriceType() {
         return priceType;
+    }
+
+    public boolean isPurchased(){
+        return this.purchased;
+    }
+
+    public void changeStatus(boolean purchased){
+        this.purchased = purchased;
     }
 }
