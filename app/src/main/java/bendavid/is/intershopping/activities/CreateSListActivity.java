@@ -22,8 +22,8 @@ import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import java.text.DateFormat;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -41,7 +41,7 @@ public class CreateSListActivity extends AppCompatActivity {
     private Supermarket supermarket;
     private List<String> newItems;
     private DatePickerDialog datePickerDialog;
-    private SimpleDateFormat sdf;
+    private DateFormat df;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +52,7 @@ public class CreateSListActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         ActionBar ab = getSupportActionBar();
+        assert ab != null;
         ab.setHomeAsUpIndicator(R.drawable.ic_arrow_back);
         ab.setDisplayHomeAsUpEnabled(true);
 
@@ -75,13 +76,13 @@ public class CreateSListActivity extends AppCompatActivity {
 
         // Get supermarkets
         final List<Supermarket> smList = Supermarket.listAll(Supermarket.class);
-        List<String> smNamesList = new ArrayList<String>();
+        List<String> smNamesList = new ArrayList<>();
         for (Supermarket sm : smList) {
             smNamesList.add(sm.toString());
         }
 
         // Supermarket spinner
-        ArrayAdapter<String> supermarkedAdapter = new ArrayAdapter<String>(getApplicationContext(),
+        ArrayAdapter<String> supermarkedAdapter = new ArrayAdapter<>(getApplicationContext(),
                 R.layout.list_item_simple, smNamesList);
         supermarkedAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         supermarketInput.setAdapter(supermarkedAdapter);
@@ -100,8 +101,8 @@ public class CreateSListActivity extends AppCompatActivity {
         });
 
         // List of new items
-        newItems = new ArrayList<String>();
-        final ArrayAdapter<String> addAdapter = new ArrayAdapter<String>(getApplicationContext(),
+        newItems = new ArrayList<>();
+        final ArrayAdapter<String> addAdapter = new ArrayAdapter<>(getApplicationContext(),
                 R.layout.list_item_simple, newItems);
         addLV.setAdapter(addAdapter);
 
@@ -118,8 +119,8 @@ public class CreateSListActivity extends AppCompatActivity {
             }
         });
 
-        sdf = new SimpleDateFormat("dd/mm/yyyy");
-        sdf.setLenient(false);
+        df = DateFormat.getDateInstance();
+        df.setLenient(false);
         Calendar newCalendar = Calendar.getInstance();
 
         datePickerDialog = new DatePickerDialog(this, new OnDateSetListener() {
@@ -127,7 +128,7 @@ public class CreateSListActivity extends AppCompatActivity {
             public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
                 Calendar newDate = Calendar.getInstance();
                 newDate.set(year, monthOfYear, dayOfMonth);
-                dateInput.setText(sdf.format(newDate.getTime()));
+                dateInput.setText(df.format(newDate.getTime()));
             }
 
         }, newCalendar.get(Calendar.YEAR), newCalendar.get(Calendar.MONTH), newCalendar.get(Calendar.DAY_OF_MONTH));
@@ -150,7 +151,7 @@ public class CreateSListActivity extends AppCompatActivity {
 
                 try {
                     //if not valid, it will throw ParseException
-                    date = sdf.parse(dateInput.getText().toString());
+                    date = df.parse(dateInput.getText().toString());
                 } catch (ParseException e) {
                     Toast.makeText(getApplicationContext(),
                             "Date Format invalid! (dd/mm/yyyy)",
@@ -188,7 +189,6 @@ public class CreateSListActivity extends AppCompatActivity {
      * Trigger when an action of the action bar is selected.
      *
      * @param item selected action
-     * @return
      */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

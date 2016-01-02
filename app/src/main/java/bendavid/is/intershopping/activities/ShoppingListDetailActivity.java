@@ -40,6 +40,7 @@ public class ShoppingListDetailActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         ab = getSupportActionBar();
+        assert ab != null;
         ab.setHomeAsUpIndicator(R.drawable.ic_arrow_back);
         ab.setDisplayHomeAsUpEnabled(true);
 
@@ -82,7 +83,6 @@ public class ShoppingListDetailActivity extends AppCompatActivity {
     /**
      * Trigger when an action of the action bar is selected.
      * @param item selected action
-     * @return
      */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

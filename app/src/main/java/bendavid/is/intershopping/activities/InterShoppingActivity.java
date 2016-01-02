@@ -1,6 +1,5 @@
 package bendavid.is.intershopping.activities;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
@@ -16,7 +15,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -27,12 +25,9 @@ import bendavid.is.intershopping.database.InitializeDatabase;
 import bendavid.is.intershopping.fragments.ShoppingListFragment;
 import bendavid.is.intershopping.fragments.SupermarketListFragment;
 
-import static bendavid.is.intershopping.database.InitializeDatabase.prepareSampleData;
-
-
 public class InterShoppingActivity extends AppCompatActivity {
-
     private DrawerLayout mDrawerLayout;
+    public FloatingActionButton fab;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +38,7 @@ public class InterShoppingActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         final ActionBar ab = getSupportActionBar();
+        assert ab != null;
         ab.setHomeAsUpIndicator(R.drawable.ic_menu);
         ab.setDisplayHomeAsUpEnabled(true);
 
@@ -61,20 +57,12 @@ public class InterShoppingActivity extends AppCompatActivity {
 
         // Tabs
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
+        assert viewPager != null;
         tabLayout.setupWithViewPager(viewPager);
 
         // Floating action button
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-//              if (view.getId() == android.R.id.) {
-                if (true) {
-                    Intent intent = new Intent(InterShoppingActivity.this, CreateSListActivity.class);
-                    startActivity(intent);
-                }
-            }
-        });
+        fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab.hide();
 
         // Fill database with sample data
         InitializeDatabase.initialize();
@@ -93,7 +81,6 @@ public class InterShoppingActivity extends AppCompatActivity {
      * Trigger when an action of the action bar is selected.
      *
      * @param item selected action
-     * @return
      */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

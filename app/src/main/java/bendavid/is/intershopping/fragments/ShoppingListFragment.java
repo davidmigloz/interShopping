@@ -18,20 +18,27 @@ import android.widget.TextView;
 import java.util.List;
 
 import bendavid.is.intershopping.R;
+import bendavid.is.intershopping.activities.CreateSListActivity;
+import bendavid.is.intershopping.activities.InterShoppingActivity;
 import bendavid.is.intershopping.activities.ShoppingListDetailActivity;
 import bendavid.is.intershopping.entities.ShoppingList;
 
+/**
+ * Show a list with all the shopping lists stored in the data base.
+ */
 public class ShoppingListFragment extends Fragment {
-
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         RecyclerView rv = (RecyclerView) inflater.inflate(
-                R.layout.fragment_list, container, false);
+                R.layout.list_shopping_lists, container, false);
         setupRecyclerView(rv);
         return rv;
     }
 
+    /**
+     * Get all the shopping lists and show them in the RecyclerView.
+     */
     private void setupRecyclerView(RecyclerView recyclerView) {
         // Get Shopping lists
         List<ShoppingList> shoppingLists = ShoppingList.listAll(ShoppingList.class);
@@ -42,9 +49,38 @@ public class ShoppingListFragment extends Fragment {
                 shoppingLists));
     }
 
+    @Override
+    public void setUserVisibleHint(boolean visible) {
+        // Set a hint to the system about whether this fragment's UI is currently visible
+        super.setUserVisibleHint(visible);
+        // call onResume() is there's any change
+        if (visible && isResumed()) {
+            onResume();
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        // If the fragment is not visible, don't do anything
+        if (!getUserVisibleHint()) {
+            return;
+        }
+        // If it's visible, set the right action to the FloatingActionButton and show it
+        InterShoppingActivity mainActivity = (InterShoppingActivity) getActivity();
+        mainActivity.fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Action: create shopping list
+                Intent intent = new Intent(getActivity(), CreateSListActivity.class);
+                startActivity(intent);
+            }
+        });
+        mainActivity.fab.show();
+    }
+
     public static class ShoppingListRecyclerViewAdapter
             extends RecyclerView.Adapter<ShoppingListRecyclerViewAdapter.ViewHolder> {
-
         private Context context;
         private List<ShoppingList> shoppingLists;
 
