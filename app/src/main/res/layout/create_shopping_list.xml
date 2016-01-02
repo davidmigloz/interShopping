@@ -73,10 +73,10 @@
                 android:id="@+id/supermarked_view"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Supermarked:"
-                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:layout_alignParentStart="true"
                 android:layout_below="@+id/datefield"
-                android:layout_alignParentStart="true" />
+                android:text="Supermarked:"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
 
             <Spinner
                 android:id="@+id/supermarkedspinner"
