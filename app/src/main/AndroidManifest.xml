@@ -30,6 +30,7 @@
         </activity>
         <activity android:name=".activities.ShoppingListDetailActivity"></activity>
         <activity android:name=".activities.CreateSListActivity"></activity>
+        <activity android:name=".activities.CreateSupermarketActivity"></activity>
 
     </application>
 

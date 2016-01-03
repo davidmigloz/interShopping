@@ -10,11 +10,18 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 public class Supermarket extends SugarRecord implements Serializable {
     private String name;
+//    private String address;
     private double coord_lat;
     private double coord_lon;
     private String notes;
 
     public Supermarket() {
+    }
+
+    public Supermarket(String lName, String lAddress, String lNotes) {
+        name = lName;
+//        address = lAddress;
+        notes = lNotes;
     }
 
     public Supermarket(String name) {

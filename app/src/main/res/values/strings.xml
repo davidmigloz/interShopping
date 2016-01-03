@@ -12,4 +12,8 @@
     <string name="new_item">New Item...</string>
     <string name="add">Add</string>
     <string name="done">Done</string>
+    <string name="new_sm_name">Name</string>
+    <string name="new_sm_address">Address</string>
+    <string name="new_sm_note">Notes</string>
+
 </resources>

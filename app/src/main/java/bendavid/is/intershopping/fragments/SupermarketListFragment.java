@@ -1,6 +1,7 @@
 package bendavid.is.intershopping.fragments;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -18,6 +19,7 @@ import android.widget.Toast;
 import java.util.List;
 
 import bendavid.is.intershopping.R;
+import bendavid.is.intershopping.activities.CreateSupermarketActivity;
 import bendavid.is.intershopping.activities.InterShoppingActivity;
 import bendavid.is.intershopping.entities.Supermarket;
 
@@ -70,10 +72,8 @@ public class SupermarketListFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 // Action: add new supermarket
-                //Intent intent = new Intent(getActivity(), AddSupermarketActivity.class);
-                //startActivity(intent);
-                Toast.makeText(v.getContext(),
-                        "Add Supermarket Pressed", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(getActivity(), CreateSupermarketActivity.class);
+                startActivity(intent);
             }
         });
         mainActivity.fab.show();
