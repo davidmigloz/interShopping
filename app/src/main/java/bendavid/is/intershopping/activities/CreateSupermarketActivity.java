@@ -33,6 +33,7 @@ public class CreateSupermarketActivity extends AppCompatActivity {
         assert ab != null;
         ab.setHomeAsUpIndicator(R.drawable.ic_arrow_back);
         ab.setDisplayHomeAsUpEnabled(true);
+        ab.setTitle("New Supermarket");
 
         // Left menu
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);

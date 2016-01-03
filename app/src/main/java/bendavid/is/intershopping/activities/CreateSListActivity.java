@@ -58,6 +58,7 @@ public class CreateSListActivity extends AppCompatActivity {
         assert ab != null;
         ab.setHomeAsUpIndicator(R.drawable.ic_arrow_back);
         ab.setDisplayHomeAsUpEnabled(true);
+        ab.setTitle("New Shopping List");
 
         // Left menu
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
