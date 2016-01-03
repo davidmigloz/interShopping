@@ -30,20 +30,19 @@
             android:layout_marginTop="45dp"
             android:padding="15dp">
 
-            <View
-                android:id="@+id/separator1"
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginBottom="10dp"
-                android:layout_marginTop="10dp"
-                android:background="@android:color/darker_gray" />
+            <!--<View-->
+                <!--android:id="@+id/separator1"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="1dp"-->
+                <!--android:layout_marginBottom="10dp"-->
+                <!--android:layout_marginTop="10dp"-->
+                <!--android:background="@android:color/darker_gray" />-->
 
             <EditText
                 android:id="@+id/newname"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignParentStart="true"
-                android:layout_below="@id/separator1"
                 android:hint="@string/new_sm_name" />
 
             <View
