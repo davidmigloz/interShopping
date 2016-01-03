@@ -31,7 +31,7 @@ public class ShoppingList extends SugarRecord implements Serializable {
 
     @Override
     public String toString() {
-        DateFormat formatter = new SimpleDateFormat("mm/dd/yyyy");
-        return formatter.format(date.getTime());
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        return sdf.format(date);
     }
 }

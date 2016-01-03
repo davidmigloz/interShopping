@@ -20,13 +20,16 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.text.DateFormat;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 import bendavid.is.intershopping.R;
@@ -34,14 +37,14 @@ import bendavid.is.intershopping.entities.ListItem;
 import bendavid.is.intershopping.entities.ShoppingList;
 import bendavid.is.intershopping.entities.Supermarket;
 
+/**
+ * Create new shopping list.
+ */
 public class CreateSListActivity extends AppCompatActivity {
-
     private DrawerLayout mDrawerLayout;
     private Date date;
     private Supermarket supermarket;
     private List<String> newItems;
-    private DatePickerDialog datePickerDialog;
-    private DateFormat df;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,11 +71,11 @@ public class CreateSListActivity extends AppCompatActivity {
     }
 
     private void showSListAddForm() {
-        ListView addLV = (ListView) findViewById(R.id.addedlist);
-        final EditText dateInput = (EditText) findViewById(R.id.datefield);
+        final TextView dateInput = (TextView) findViewById(R.id.datefield);
         final Spinner supermarketInput = (Spinner) findViewById(R.id.supermarkedspinner);
         final EditText itemInput = (EditText) findViewById(R.id.itemfield);
         Button addBtn = (Button) findViewById(R.id.addbtn);
+        ListView addLV = (ListView) findViewById(R.id.addedlist);
 
         // Get supermarkets
         final List<Supermarket> smList = Supermarket.listAll(Supermarket.class);
@@ -119,18 +122,25 @@ public class CreateSListActivity extends AppCompatActivity {
             }
         });
 
-        df = DateFormat.getDateInstance();
-        df.setLenient(false);
+        // Date
         Calendar newCalendar = Calendar.getInstance();
+        final SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 
-        datePickerDialog = new DatePickerDialog(this, new OnDateSetListener() {
+        // Set today's date as default
+        date = new Date();
+        dateInput.setText(sdf.format(date));
 
-            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                Calendar newDate = Calendar.getInstance();
-                newDate.set(year, monthOfYear, dayOfMonth);
-                dateInput.setText(df.format(newDate.getTime()));
+        // Date picker
+        final DatePickerDialog datePickerDialog = new DatePickerDialog(this, new OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker view, int year, int month, int day) {
+                try {
+                    date = sdf.parse(day + "/" + month + 1 + "/" + year);
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+                dateInput.setText(sdf.format(date));
             }
-
         }, newCalendar.get(Calendar.YEAR), newCalendar.get(Calendar.MONTH), newCalendar.get(Calendar.DAY_OF_MONTH));
 
         dateInput.setOnClickListener(new View.OnClickListener() {
@@ -138,50 +148,32 @@ public class CreateSListActivity extends AppCompatActivity {
             public void onClick(View view) {
                 datePickerDialog.show();
             }
-
-
-        });
-
-
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                // Get date
-
-                try {
-                    //if not valid, it will throw ParseException
-                    date = df.parse(dateInput.getText().toString());
-                } catch (ParseException e) {
-                    Toast.makeText(getApplicationContext(),
-                            "Date Format invalid! (dd/mm/yyyy)",
-                            Toast.LENGTH_SHORT).show();
-                }
-
-                if (date != null && supermarket != null && newItems.size() > 0) {
-                    ShoppingList newSL = new ShoppingList(date, supermarket);
-                    newSL.save();
-                    for (String item : newItems) {
-                        new ListItem(item, newSL).save();
-                    }
-                    Toast.makeText(getApplicationContext(),
-                            "New Shopping List saved.", Toast.LENGTH_SHORT).show();
-                    Intent intent = new Intent(CreateSListActivity.this, InterShoppingActivity.class);
-                    startActivity(intent);
-                } else {
-                    Toast.makeText(getApplicationContext(),
-                            "Fill the inputs", Toast.LENGTH_SHORT).show();
-                }
-            }
         });
     }
 
+    private void addSList() {
+        if (date != null && supermarket != null && newItems.size() > 0) {
+            ShoppingList newSL = new ShoppingList(date, supermarket);
+            newSL.save();
+            for (String item : newItems) {
+                new ListItem(item, newSL).save();
+            }
+            Toast.makeText(getApplicationContext(),
+                    "New Shopping List saved.", Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(CreateSListActivity.this, InterShoppingActivity.class);
+            startActivity(intent);
+        } else {
+            Toast.makeText(getApplicationContext(),
+                    "Fill the inputs", Toast.LENGTH_SHORT).show();
+        }
+    }
+
     /**
-     * Inflate xml of the menu of the action bar.
+     * Inflate xml of the menu of the action bar (done / discart).
      */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.action_settings, menu);
+        getMenuInflater().inflate(R.menu.done_discart, menu);
         return true;
     }
 
@@ -198,9 +190,8 @@ public class CreateSListActivity extends AppCompatActivity {
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
                 break;
-            case R.id.action_settings:
-                Toast.makeText(this,
-                        "Settings not available at the moment", Toast.LENGTH_SHORT).show();
+            case R.id.action_menu_done:
+                addSList();
             default:
                 break;
         }

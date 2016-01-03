@@ -113,7 +113,7 @@ public class SupermarketListFragment extends Fragment {
         @Override
         public void onBindViewHolder(final ViewHolder viewHolder, int position) {
             // Supermarket's icon
-            Drawable icon = ContextCompat.getDrawable(context, R.drawable.ic_event);
+            Drawable icon = ContextCompat.getDrawable(context, R.drawable.ic_calendar_24);
             viewHolder.icon.setImageDrawable(icon);
             // Supermarket name
             viewHolder.item_name.setText(supermarkets.get(position).toString());
