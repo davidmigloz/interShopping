@@ -2,7 +2,11 @@ package bendavid.is.intershopping.activities;
 
 import android.app.DatePickerDialog;
 import android.app.DatePickerDialog.OnDateSetListener;
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
@@ -10,6 +14,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -22,6 +27,9 @@ import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.memetix.mst.language.Language;
+import com.memetix.mst.translate.Translate;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -37,6 +45,7 @@ import bendavid.is.intershopping.entities.ListItem;
 import bendavid.is.intershopping.entities.ShoppingList;
 import bendavid.is.intershopping.entities.Supermarket;
 
+
 /**
  * Create new shopping list.
  */
@@ -45,6 +54,7 @@ public class CreateSListActivity extends AppCompatActivity {
     private Date date;
     private Supermarket supermarket;
     private List<String> newItems;
+    private boolean submitted;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,6 +82,7 @@ public class CreateSListActivity extends AppCompatActivity {
     }
 
     private void showSListAddForm() {
+        submitted = false;
         final TextView dateInput = (TextView) findViewById(R.id.datefield);
         final Spinner supermarketInput = (Spinner) findViewById(R.id.supermarkedspinner);
         final EditText itemInput = (EditText) findViewById(R.id.itemfield);
@@ -153,19 +164,65 @@ public class CreateSListActivity extends AppCompatActivity {
     }
 
     private void addSList() {
-        if (date != null && supermarket != null && newItems.size() > 0) {
-            ShoppingList newSL = new ShoppingList(date, supermarket);
-            newSL.save();
-            for (String item : newItems) {
-                new ListItem(item, newSL).save();
-            }
+        if (submitted) {
             Toast.makeText(getApplicationContext(),
-                    "New Shopping List saved.", Toast.LENGTH_SHORT).show();
-            Intent intent = new Intent(CreateSListActivity.this, InterShoppingActivity.class);
-            startActivity(intent);
+                    "The automatic translation takes a while...", Toast.LENGTH_SHORT).show();
         } else {
-            Toast.makeText(getApplicationContext(),
-                    "Fill the inputs", Toast.LENGTH_SHORT).show();
+            if (date != null && supermarket != null && newItems.size() > 0 && !submitted) {
+                submitted = true;
+            /*boolean connected = false;
+            ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+            if (connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE).getState() == NetworkInfo.State.CONNECTED ||
+                    connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI).getState() == NetworkInfo.State.CONNECTED) {
+                //we are connected to a network
+                connected = true;
+                Toast.makeText(getApplicationContext(),
+                        "TRUE", Toast.LENGTH_SHORT).show();
+            } else {
+                connected = false;
+                Toast.makeText(getApplicationContext(),
+                        "FALSE", Toast.LENGTH_SHORT).show();
+            }*/
+
+                Toast.makeText(getApplicationContext(),
+                        "The automatic translation takes a while...", Toast.LENGTH_SHORT).show();
+
+                class backgroundTranslation extends AsyncTask<Void, Void, Void> {
+                    @Override
+                    protected Void doInBackground(Void... params) {
+                        ShoppingList newSL = new ShoppingList(date, supermarket);
+                        newSL.save();
+                        String translatedText;
+                        Log.d("myTag", "This is my message");
+                        for (String item : newItems) {
+                            try {
+                                translatedText = translate(item);
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                                translatedText = e.toString();
+                            }
+                            new ListItem(item, translatedText, newSL).save();
+//                new ListItem(item, newSL).save();
+                        }
+                        return null;
+                    }
+
+                    @Override
+                    protected void onPostExecute(Void result) {
+                        Toast.makeText(getApplicationContext(),
+                                "...New Shopping List saved.", Toast.LENGTH_SHORT).show();
+                        Intent intent = new Intent(CreateSListActivity.this, InterShoppingActivity.class);
+                        startActivity(intent);
+                        super.onPostExecute(result);
+                    }
+                }
+                new backgroundTranslation().execute();
+
+
+            } else {
+                Toast.makeText(getApplicationContext(),
+                        "Fill the inputs", Toast.LENGTH_SHORT).show();
+            }
         }
     }
 
@@ -212,5 +269,19 @@ public class CreateSListActivity extends AppCompatActivity {
                         return true;
                     }
                 });
+    }
+
+    public String translate(String text) throws Exception {
+
+        // Set the Client ID / Client Secret once per JVM. It is set statically and applies to all services
+        Translate.setClientId("bdintershopping");
+        Translate.setClientSecret("5h5S7KCTSFF53C4AQQBOlfQseTaHLax3Dmx52u8ejJ8");
+//        Translate.setClientSecret("5h5S7KCTSFF53d4AQQBOlfQseTaHLax3Dmx52u8ejJ8");
+
+        String translatedText = "";
+        // Change Language to variable from settings.
+//        translatedText = Translate.execute(text, Language.AUTO_DETECT, Language.POLISH);
+        translatedText = Translate.execute(text, Language.ENGLISH, Language.GERMAN);
+        return translatedText;
     }
 }

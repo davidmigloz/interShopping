@@ -67,7 +67,7 @@ public class ShoppingListDetailActivity extends AppCompatActivity {
         // Set action bar title
         ab.setTitle(shoppingList.toString());
         // Show items
-        RecyclerView rv = (RecyclerView)findViewById(R.id.recyclerview);
+        RecyclerView rv = (RecyclerView) findViewById(R.id.recyclerview);
         setupRecyclerView(rv, shoppingListID);
     }
 
@@ -82,6 +82,7 @@ public class ShoppingListDetailActivity extends AppCompatActivity {
 
     /**
      * Trigger when an action of the action bar is selected.
+     *
      * @param item selected action
      */
     @Override
@@ -168,14 +169,14 @@ public class ShoppingListDetailActivity extends AppCompatActivity {
             final ListItem li = itemslist.get(position);
             // Icon
             Drawable icon;
-            if(li.isPurchased()) {
+            if (li.isPurchased()) {
                 icon = ContextCompat.getDrawable(context, R.drawable.ic_check_circle);
             } else {
                 icon = ContextCompat.getDrawable(context, R.drawable.ic_add_circle_outline);
             }
             viewHolder.icon.setImageDrawable(icon);
             // Item name
-            viewHolder.item_name.setText(itemslist.get(position).getName());
+            viewHolder.item_name.setText(itemslist.get(position).getName() + " / " + itemslist.get(position).getTranslation());
             // Listener
             viewHolder.mView.setOnClickListener(new View.OnClickListener() {
                 /**
@@ -185,10 +186,10 @@ public class ShoppingListDetailActivity extends AppCompatActivity {
                 public void onClick(View v) {
                     // Change Icon
                     Drawable icon;
-                    if(li.isPurchased()) {
+                    if (li.isPurchased()) {
                         li.changeStatus(false);
                         icon = ContextCompat.getDrawable(context, R.drawable.ic_add_circle_outline);
-                    } else{
+                    } else {
                         li.changeStatus(true);
                         icon = ContextCompat.getDrawable(context, R.drawable.ic_check_circle);
                     }

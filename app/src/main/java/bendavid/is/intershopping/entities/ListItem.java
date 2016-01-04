@@ -24,6 +24,13 @@ public class ListItem extends SugarRecord {
         this.purchased = false;
     }
 
+    public ListItem(String name, String translation, ShoppingList shoppingList) {
+        this.name = name;
+        this.translation = translation;
+        this.shoppingList = shoppingList;
+        this.purchased = false;
+    }
+
     private enum PriceType {
         MONEY_UNIT, MONEY_KILO
     }
@@ -44,11 +51,11 @@ public class ListItem extends SugarRecord {
         return priceType;
     }
 
-    public boolean isPurchased(){
+    public boolean isPurchased() {
         return this.purchased;
     }
 
-    public void changeStatus(boolean purchased){
+    public void changeStatus(boolean purchased) {
         this.purchased = purchased;
     }
 }
