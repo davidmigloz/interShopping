@@ -6,6 +6,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 
+import bendavid.is.intershopping.entities.AppConfig;
+import bendavid.is.intershopping.entities.Languages;
 import bendavid.is.intershopping.entities.ListItem;
 import bendavid.is.intershopping.entities.ShoppingList;
 import bendavid.is.intershopping.entities.Supermarket;
@@ -17,7 +19,7 @@ public final class InitializeDatabase {
     }
 
     public static void initialize() {
-        if(instance == null) {
+        if (instance == null) {
             instance = new InitializeDatabase();
             prepareSampleData();
         }
@@ -40,6 +42,10 @@ public final class InitializeDatabase {
 
         List<Supermarket> supermarketsList = new ArrayList<Supermarket>();
         List<ShoppingList> shoppingLists = new ArrayList<ShoppingList>();
+
+        // Create Config
+//        AppConfig c = new AppConfig("English",true);
+//        c.save();
 
         // Create supermarkets
         for (String name : supermarketsNames) {

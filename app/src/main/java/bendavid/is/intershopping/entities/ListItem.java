@@ -2,7 +2,6 @@ package bendavid.is.intershopping.entities;
 
 import com.orm.SugarRecord;
 
-import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * Item of a shopping list.

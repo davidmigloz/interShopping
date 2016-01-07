@@ -27,5 +27,11 @@ dependencies {
     // SugarORM installation
     compile 'com.github.satyan:sugar:1.4'
     compile 'com.getbase:floatingactionbutton:1.10.1'
-    compile files('libs/microsoft-translator-java-api-0.6.2-jar-with-dependencies.jar')
+//    compile files('libs/microsoft-translator-java-api-0.6.2-jar-with-dependencies.jar')
+
+//    compile 'org.springframework.android:spring-android-rest-template:1.0.1.RELEASE'
+//    compile 'com.fasterxml.jackson.core:jackson-databind:2.3.2'
+
+    // AppMetrica from maven central. Protobuf will be included as dependency.
+//    compile 'com.yandex.android:mobmetricalib:2.30:jar'
 }

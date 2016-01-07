@@ -1,5 +1,6 @@
 package bendavid.is.intershopping.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
@@ -89,8 +90,9 @@ public class InterShoppingActivity extends AppCompatActivity {
                 mDrawerLayout.openDrawer(GravityCompat.START);
                 return true;
             case R.id.action_settings:
-                Toast.makeText(this,
-                        "Settings not available at the moment", Toast.LENGTH_SHORT).show();
+                // Action: Settings
+                Intent intent = new Intent(this, SettingsActivity.class);
+                startActivity(intent);
             default:
                 break;
         }

@@ -28,9 +28,22 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+
 import com.memetix.mst.language.Language;
 import com.memetix.mst.translate.Translate;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+
+import java.io.BufferedInputStream;
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.net.URLConnection;
+import java.net.URLEncoder;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -126,6 +139,7 @@ public class CreateSListActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 String text = itemInput.getText().toString();
+                text = text.replace(System.getProperty("line.separator"), " ");
                 if (!text.equals("")) {
                     newItems.add(text);
                     addAdapter.notifyDataSetChanged();
@@ -170,58 +184,59 @@ public class CreateSListActivity extends AppCompatActivity {
         } else {
             if (date != null && supermarket != null && newItems.size() > 0 && !submitted) {
                 submitted = true;
-            /*boolean connected = false;
-            ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-            if (connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE).getState() == NetworkInfo.State.CONNECTED ||
-                    connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI).getState() == NetworkInfo.State.CONNECTED) {
-                //we are connected to a network
-                connected = true;
-                Toast.makeText(getApplicationContext(),
-                        "TRUE", Toast.LENGTH_SHORT).show();
-            } else {
-                connected = false;
-                Toast.makeText(getApplicationContext(),
-                        "FALSE", Toast.LENGTH_SHORT).show();
-            }*/
+                ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+                if (connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE).getState() == NetworkInfo.State.CONNECTED ||
+                        connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI).getState() == NetworkInfo.State.CONNECTED) {
+                    //we are connected to a network
 
-                Toast.makeText(getApplicationContext(),
-                        "The automatic translation takes a while...", Toast.LENGTH_SHORT).show();
-
-                class backgroundTranslation extends AsyncTask<Void, Void, Void> {
-                    @Override
-                    protected Void doInBackground(Void... params) {
-                        ShoppingList newSL = new ShoppingList(date, supermarket);
-                        newSL.save();
-                        String translatedText;
-                        Log.d("myTag", "This is my message");
-                        for (String item : newItems) {
-                            try {
-                                translatedText = translate(item);
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                                translatedText = e.toString();
-                            }
-                            new ListItem(item, translatedText, newSL).save();
+                    class backgroundTranslation extends AsyncTask<Void, Void, Void> {
+                        @Override
+                        protected Void doInBackground(Void... params) {
+                            ShoppingList newSL = new ShoppingList(date, supermarket);
+                            newSL.save();
+                            String translatedText;
+                            for (String item : newItems) {
+                                try {
+                                    translatedText = translate(item);
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                    translatedText = e.toString();
+                                }
+                                new ListItem(item, translatedText, newSL).save();
 //                new ListItem(item, newSL).save();
+                            }
+                            return null;
                         }
-                        return null;
-                    }
 
-                    @Override
-                    protected void onPostExecute(Void result) {
-                        Toast.makeText(getApplicationContext(),
-                                "...New Shopping List saved.", Toast.LENGTH_SHORT).show();
-                        Intent intent = new Intent(CreateSListActivity.this, InterShoppingActivity.class);
-                        startActivity(intent);
-                        super.onPostExecute(result);
+                        @Override
+                        protected void onPostExecute(Void result) {
+                            Toast.makeText(getApplicationContext(),
+                                    "...New Shopping List saved.", Toast.LENGTH_SHORT).show();
+                            Intent intent = new Intent(CreateSListActivity.this, InterShoppingActivity.class);
+                            startActivity(intent);
+                            super.onPostExecute(result);
+                        }
+                    }
+                    Toast.makeText(getApplicationContext(),
+                            "The automatic translation takes a while...", Toast.LENGTH_SHORT).show();
+                    new backgroundTranslation().execute();
+
+//                Toast.makeText(getApplicationContext(),
+//                        "TRUE", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(getApplicationContext(),
+                            "No Internet Connection! Save without translation!", Toast.LENGTH_SHORT).show();
+                    ShoppingList newSL = new ShoppingList(date, supermarket);
+                    newSL.save();
+                    for (String item : newItems) {
+                        new ListItem(item, newSL).save();
                     }
                 }
-                new backgroundTranslation().execute();
-
-
             } else {
                 Toast.makeText(getApplicationContext(),
                         "Fill the inputs", Toast.LENGTH_SHORT).show();
+
+
             }
         }
     }
@@ -259,6 +274,7 @@ public class CreateSListActivity extends AppCompatActivity {
     /**
      * Setup left menu.
      */
+
     private void setupDrawerContent(NavigationView navigationView) {
         navigationView.setNavigationItemSelectedListener(
                 new NavigationView.OnNavigationItemSelectedListener() {
@@ -272,16 +288,84 @@ public class CreateSListActivity extends AppCompatActivity {
     }
 
     public String translate(String text) throws Exception {
+        JSONObject jobj;
+        String json = "", translatedText = "";
+        // Hello%20World
+        text = text.replace(System.getProperty("line.separator"), " ");
+        text = URLEncoder.encode(text, "utf-8");
+        String lang = "de";
+//        URL url = new URL("http://api.mymemory.translated.net/get?q=" + text + "!&langpair=Autodetect|de");
+        URL url = new URL("https://translate.yandex.net/api/v1.5/tr.json/translate?" +
+                "key=" + "trnsl.1.1.20160107T140340Z.3a9a6b4696483460.12c87164fd285e07c39ff4fde63b5c98feef6dd4" +
+                "&text=" + text +
+                "&lang=" + lang);
+        HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
+        try {
+            InputStream in = new BufferedInputStream(urlConnection.getInputStream());
+            StringBuilder sb = new StringBuilder();
+            BufferedReader reader = new BufferedReader(new InputStreamReader(in));
 
-        // Set the Client ID / Client Secret once per JVM. It is set statically and applies to all services
-        Translate.setClientId("bdintershopping");
-        Translate.setClientSecret("5h5S7KCTSFF53C4AQQBOlfQseTaHLax3Dmx52u8ejJ8");
-//        Translate.setClientSecret("5h5S7KCTSFF53d4AQQBOlfQseTaHLax3Dmx52u8ejJ8");
+            String nextLine = "";
+            while ((nextLine = reader.readLine()) != null) {
+                sb.append(nextLine);
+            }
 
-        String translatedText = "";
-        // Change Language to variable from settings.
-//        translatedText = Translate.execute(text, Language.AUTO_DETECT, Language.POLISH);
-        translatedText = Translate.execute(text, Language.ENGLISH, Language.GERMAN);
+            json = sb.toString();
+
+            try {
+                jobj = new JSONObject(json);
+                int code = Integer.parseInt(jobj.getString("code")); // yandex
+//                int code = Integer.parseInt(jobj.getString("responseStatus")); // mymemory
+                if (code == 200 || code == 201) {
+                    translatedText = jobj.getString("text");// yandex
+                    translatedText = translatedText.substring(2, translatedText.length()-2);
+                    Log.d(translatedText, translatedText);
+//                    JSONObject jobj2 = new JSONObject(jobj.getString("responseData")); // mymemory
+//                    translatedText = jobj2.getString("translatedText");
+//                    Log.d(translatedText, translatedText);
+                }
+            } catch (NumberFormatException e) {
+                e.printStackTrace();
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            urlConnection.disconnect();
+        }
+        Log.d("json", json);
         return translatedText;
     }
 }
+
+//        String translated = null;
+//        try {
+//            String query = URLEncoder.encode(text, "UTF-8");
+//            String langpair = URLEncoder.encode(srcLanguage.getLanguage() + "|" + dstLanguage.getLanguage(), "UTF-8");
+//            String url = "http://mymemory.translated.net/api/get?q=" + query + "&langpair=" + langpair;
+//            URLConnection urlConnection = url.openConnection();
+//
+//            HttpClient hc = new DefaultHttpClient();
+//            HttpGet hg = new HttpGet(url);
+//            HttpResponse hr = hc.execute(hg);
+//            if (hr.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
+//                JSONObject response = new JSONObject(EntityUtils.toString(hr.getEntity()));
+//                translated = response.getJSONObject("responseData").getString("translatedText");
+//            }
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//        return translated;
+
+
+//        // Set the Client ID / Client Secret once per JVM. It is set statically and applies to all services
+//        Translate.setClientId("bdintershopping");
+//        Translate.setClientSecret("5h5S7KCTSFF53C4AQQBOlfQseTaHLax3Dmx52u8ejJ8");
+////        Translate.setClientSecret("5h5S7KCTSFF53d4AQQBOlfQseTaHLax3Dmx52u8ejJ8");
+//
+//        String translatedText = "";
+//        // Change Language to variable from settings.
+////        translatedText = Translate.execute(text, Language.AUTO_DETECT, Language.POLISH);
+//        translatedText = Translate.execute(text, Language.ENGLISH, Language.GERMAN);
+//        return translatedText;
