@@ -46,9 +46,9 @@ public final class InitializeDatabase {
         List<ShoppingList> shoppingLists = new ArrayList<>();
         List<Date> dates = new ArrayList<>();
 
-        // Create Config
-//        AppConfig c = new AppConfig("English",true);
-//        c.save();
+//         Create Config
+        AppConfig c = new AppConfig("English",true);
+        c.save();
 
         // Create supermarkets
         for (String name : supermarketsNames) {
