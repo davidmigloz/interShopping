@@ -76,7 +76,7 @@ public class ShoppingListDetailActivity extends AppCompatActivity {
      */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.action_settings, menu);
+        getMenuInflater().inflate(R.menu.main_menu, menu);
         return true;
     }
 

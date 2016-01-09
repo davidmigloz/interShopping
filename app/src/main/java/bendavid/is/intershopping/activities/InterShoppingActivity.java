@@ -16,7 +16,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -74,7 +73,7 @@ public class InterShoppingActivity extends AppCompatActivity {
      */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.action_settings, menu);
+        getMenuInflater().inflate(R.menu.main_menu, menu);
         return true;
     }
 
@@ -91,8 +90,14 @@ public class InterShoppingActivity extends AppCompatActivity {
                 return true;
             case R.id.action_settings:
                 // Action: Settings
-                Intent intent = new Intent(this, SettingsActivity.class);
-                startActivity(intent);
+                Intent settings = new Intent(this, SettingsActivity.class);
+                startActivity(settings);
+                break;
+            case R.id.action_stats:
+                // Action: Stats
+                Intent stats = new Intent(this, StatsActivity.class);
+                startActivity(stats);
+                break;
             default:
                 break;
         }
@@ -106,6 +111,9 @@ public class InterShoppingActivity extends AppCompatActivity {
         viewPager.setAdapter(adapter);
     }
 
+    /**
+     * Setup left menu.
+     */
     private void setupDrawerContent(NavigationView navigationView) {
         navigationView.setNavigationItemSelectedListener(
                 new NavigationView.OnNavigationItemSelectedListener() {

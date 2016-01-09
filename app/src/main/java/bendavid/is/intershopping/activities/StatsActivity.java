@@ -3,41 +3,40 @@ package bendavid.is.intershopping.activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
+import android.support.design.widget.TabLayout;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.Spinner;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import bendavid.is.intershopping.R;
-import bendavid.is.intershopping.entities.Languages;
+import bendavid.is.intershopping.fragments.ChartsFragment;
+import bendavid.is.intershopping.fragments.ComparisonsFragment;
 
-/**
- * Create new shopping list.
- */
-public class SettingsActivity extends AppCompatActivity {
+public class StatsActivity extends AppCompatActivity {
     private DrawerLayout mDrawerLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.settings);
+        setContentView(R.layout.stats);
 
         // Action bar
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        ActionBar ab = getSupportActionBar();
+        final ActionBar ab = getSupportActionBar();
         assert ab != null;
         ab.setHomeAsUpIndicator(R.drawable.ic_arrow_back);
         ab.setDisplayHomeAsUpEnabled(true);
-        ab.setTitle("Settings");
+        ab.setTitle("Stats");
 
         // Left menu
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -46,47 +45,16 @@ public class SettingsActivity extends AppCompatActivity {
             setupDrawerContent(navigationView);
         }
 
-        // Show settings
-        showSettings();
-    }
-
-    private void showSettings() {
-        final Spinner selectLanguageSpinner = (Spinner) findViewById(R.id.selectLanguageSpinner);
-        // Get Config - language
-
-//        final Languages language = new Languages(AppConfig.first(AppConfig.class).getLanguage());
-        final Languages language = new Languages("Polish");
-
-        // Supermarket spinner
-        ArrayAdapter<String> languageAdapter = new ArrayAdapter<>(getApplicationContext(),
-                R.layout.list_item_simple, language.getLanguageList());
-        languageAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        selectLanguageSpinner.setAdapter(languageAdapter);
-//        selectLanguageSpinner.setSelection(language.getLanguageList().indexOf(language.getLanguage()));
-        int pos = 0;
-        for (String search : language.getLanguageList()) {
-            if (search.equalsIgnoreCase(language.getLanguage())) {
-                selectLanguageSpinner.setSelection(pos);
-                Log.d("pos: ", String.valueOf(pos));
-                break;
-            }
-            pos++;
+        // ViewPager
+        ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
+        if (viewPager != null) {
+            setupViewPager(viewPager);
         }
-        Log.d(language.getLanguage(), String.valueOf(pos));
 
-
-        // Select supermarket
-        selectLanguageSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                language.setLanguage(language.getLanguageList().get(position));
-                selectLanguageSpinner.setSelection(position);
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-            }
-        });
+        // Tabs
+        TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
+        assert viewPager != null;
+        tabLayout.setupWithViewPager(viewPager);
     }
 
     /**
@@ -108,6 +76,13 @@ public class SettingsActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    private void setupViewPager(ViewPager viewPager) {
+        Adapter adapter = new Adapter(getSupportFragmentManager());
+        adapter.addFragment(new ChartsFragment(), "Charts");
+        adapter.addFragment(new ComparisonsFragment(), "Comparisons");
+        viewPager.setAdapter(adapter);
+    }
+
     /**
      * Setup left menu.
      */
@@ -121,5 +96,34 @@ public class SettingsActivity extends AppCompatActivity {
                         return true;
                     }
                 });
+    }
+
+    static class Adapter extends FragmentPagerAdapter {
+        private final List<Fragment> mFragments = new ArrayList<>();
+        private final List<String> mFragmentTitles = new ArrayList<>();
+
+        public Adapter(FragmentManager fm) {
+            super(fm);
+        }
+
+        public void addFragment(Fragment fragment, String title) {
+            mFragments.add(fragment);
+            mFragmentTitles.add(title);
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+            return mFragments.get(position);
+        }
+
+        @Override
+        public int getCount() {
+            return mFragments.size();
+        }
+
+        @Override
+        public CharSequence getPageTitle(int position) {
+            return mFragmentTitles.get(position);
+        }
     }
 }

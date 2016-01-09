@@ -1,5 +1,7 @@
 package bendavid.is.intershopping.database;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
@@ -31,17 +33,18 @@ public final class InitializeDatabase {
         ShoppingList.deleteAll(ShoppingList.class);
         Supermarket.deleteAll(Supermarket.class);
         // Insert data
-        insertData();
+        insertData(10);
     }
 
-    public static void insertData() {
+    public static void insertData(int numSL) {
         Random random = new Random();
         String[] supermarketsNames = {"Auchan", "Biedronka", "Carrefour market", "Carrefor express"};
         String[] itemsNames = {"Ketchup", "Potatoes", "Garlic", "Bread", "Pizza", "Pasta",
                 "Milk", "Turkey"};
 
-        List<Supermarket> supermarketsList = new ArrayList<Supermarket>();
-        List<ShoppingList> shoppingLists = new ArrayList<ShoppingList>();
+        List<Supermarket> supermarketsList = new ArrayList<>();
+        List<ShoppingList> shoppingLists = new ArrayList<>();
+        List<Date> dates = new ArrayList<>();
 
         // Create Config
 //        AppConfig c = new AppConfig("English",true);
@@ -54,11 +57,27 @@ public final class InitializeDatabase {
             supermarketsList.add(s);
         }
 
+        // Create random dates
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        for (int i = 0; i < numSL; i++) {
+            int day = randInt(1, 28);
+            int month = randInt(1, 12);
+            int year = randInt(2013, 2015);
+            Date date;
+            try {
+                date = sdf.parse(day + "/" + month + "/" + year);
+            } catch (ParseException e) {
+                e.printStackTrace();
+                return;
+            }
+            dates.add(date);
+        }
+
         // Create shopping lists
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < numSL; i++) {
             // Get random supermarket
             Supermarket s = supermarketsList.get(random.nextInt(supermarketsList.size()));
-            ShoppingList sl = new ShoppingList(new Date(random.nextInt()), s);
+            ShoppingList sl = new ShoppingList(dates.get(i), s);
             sl.save();
             shoppingLists.add(sl);
         }
@@ -67,9 +86,21 @@ public final class InitializeDatabase {
         for (ShoppingList sl : shoppingLists) {
             int nItems = 5 + random.nextInt(10); // Minimum 5 items
             for (int i = 0; i < nItems; i++) {
-                ListItem it = new ListItem(itemsNames[random.nextInt(itemsNames.length)], sl);
+                //ListItem it = new ListItem(itemsNames[random.nextInt(itemsNames.length)], sl);
+                ListItem it = new ListItem(itemsNames[random.nextInt(itemsNames.length)],
+                        randInt(1, 10), ListItem.PriceType.MONEY_UNIT, sl);
                 it.save();
             }
+            sl.updateTotalPrice();
+            sl.save();
         }
+    }
+
+    /**
+     * Returns a pseudo-random number between min and max, inclusive.
+     */
+    private static int randInt(int min, int max) {
+        Random rand = new Random();
+        return rand.nextInt((max - min) + 1) + min;
     }
 }

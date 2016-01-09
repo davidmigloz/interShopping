@@ -30,7 +30,14 @@ public class ListItem extends SugarRecord {
         this.purchased = false;
     }
 
-    private enum PriceType {
+    public ListItem(String name, long price, PriceType priceType, ShoppingList shoppingList) {
+        this.name = name;
+        this.price = price;
+        this.priceType = priceType;
+        this.shoppingList = shoppingList;
+    }
+
+    public enum PriceType {
         MONEY_UNIT, MONEY_KILO
     }
 

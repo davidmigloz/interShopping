@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.util.Collections;
 import java.util.List;
 
 import bendavid.is.intershopping.R;
@@ -42,6 +43,7 @@ public class ShoppingListFragment extends Fragment {
     private void setupRecyclerView(RecyclerView recyclerView) {
         // Get Shopping lists
         List<ShoppingList> shoppingLists = ShoppingList.listAll(ShoppingList.class);
+        Collections.sort(shoppingLists, Collections.reverseOrder());
 
         // LinearLayoutManager provides a similar implementation to a ListView
         recyclerView.setLayoutManager(new LinearLayoutManager(recyclerView.getContext()));
@@ -116,7 +118,8 @@ public class ShoppingListFragment extends Fragment {
             Drawable icon = ContextCompat.getDrawable(context, R.drawable.ic_shopping_cart);
             viewHolder.icon.setImageDrawable(icon);
             // Supermarket name
-            viewHolder.item_name.setText(shoppingLists.get(position).toString());
+            viewHolder.item_name.setText(shoppingLists.get(position).toString()
+                    + " (" + shoppingLists.get(position).getTotalPrice() + "€)");
 
             // Listener
             viewHolder.mView.setOnClickListener(new View.OnClickListener() {

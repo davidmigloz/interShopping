@@ -15,5 +15,6 @@
     <string name="new_sm_name">Name</string>
     <string name="new_sm_address">Address</string>
     <string name="new_sm_note">Notes</string>
+    <string name="stats">Stats</string>
 
 </resources>

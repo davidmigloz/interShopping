@@ -8,7 +8,6 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
@@ -28,10 +27,6 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-
-import com.memetix.mst.language.Language;
-import com.memetix.mst.translate.Translate;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -42,15 +37,12 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.net.URLConnection;
 import java.net.URLEncoder;
-import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.List;
 
 import bendavid.is.intershopping.R;
@@ -203,7 +195,6 @@ public class CreateSListActivity extends AppCompatActivity {
                                     translatedText = e.toString();
                                 }
                                 new ListItem(item, translatedText, newSL).save();
-//                new ListItem(item, newSL).save();
                             }
                             return null;
                         }
@@ -221,8 +212,6 @@ public class CreateSListActivity extends AppCompatActivity {
                             "The automatic translation takes a while...", Toast.LENGTH_SHORT).show();
                     new backgroundTranslation().execute();
 
-//                Toast.makeText(getApplicationContext(),
-//                        "TRUE", Toast.LENGTH_SHORT).show();
                 } else {
                     Toast.makeText(getApplicationContext(),
                             "No Internet Connection! Save without translation!", Toast.LENGTH_SHORT).show();
