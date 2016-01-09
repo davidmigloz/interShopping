@@ -30,7 +30,6 @@ import android.widget.Toast;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.InputStream;
@@ -215,11 +214,7 @@ public class CreateSListActivity extends AppCompatActivity {
                 } else {
                     Toast.makeText(getApplicationContext(),
                             "No Internet Connection! Save without translation!", Toast.LENGTH_SHORT).show();
-                    ShoppingList newSL = new ShoppingList(date, supermarket);
-                    newSL.save();
-                    for (String item : newItems) {
-                        new ListItem(item, newSL).save();
-                    }
+                    saveWithoutTranslation();
                 }
             } else {
                 Toast.makeText(getApplicationContext(),
@@ -307,7 +302,7 @@ public class CreateSListActivity extends AppCompatActivity {
 //                int code = Integer.parseInt(jobj.getString("responseStatus")); // mymemory
                 if (code == 200 || code == 201) {
                     translatedText = jobj.getString("text");// yandex
-                    translatedText = translatedText.substring(2, translatedText.length()-2);
+                    translatedText = translatedText.substring(2, translatedText.length() - 2);
                     Log.d(translatedText, translatedText);
 //                    JSONObject jobj2 = new JSONObject(jobj.getString("responseData")); // mymemory
 //                    translatedText = jobj2.getString("translatedText");
@@ -315,46 +310,30 @@ public class CreateSListActivity extends AppCompatActivity {
                 }
             } catch (NumberFormatException e) {
                 e.printStackTrace();
+                saveWithoutTranslation();
             } catch (JSONException e) {
                 e.printStackTrace();
+                saveWithoutTranslation();
             }
         } catch (Exception e) {
             e.printStackTrace();
+            saveWithoutTranslation();
         } finally {
             urlConnection.disconnect();
         }
         Log.d("json", json);
         return translatedText;
     }
+
+    void saveWithoutTranslation() {
+        ShoppingList newSL = new ShoppingList(date, supermarket);
+        newSL.save();
+        for (String item : newItems) {
+            new ListItem(item, newSL).save();
+        }
+        Toast.makeText(getApplicationContext(),
+                "...New Shopping List saved without translation.", Toast.LENGTH_SHORT).show();
+        Intent intent = new Intent(CreateSListActivity.this, InterShoppingActivity.class);
+        startActivity(intent);
+    }
 }
-
-//        String translated = null;
-//        try {
-//            String query = URLEncoder.encode(text, "UTF-8");
-//            String langpair = URLEncoder.encode(srcLanguage.getLanguage() + "|" + dstLanguage.getLanguage(), "UTF-8");
-//            String url = "http://mymemory.translated.net/api/get?q=" + query + "&langpair=" + langpair;
-//            URLConnection urlConnection = url.openConnection();
-//
-//            HttpClient hc = new DefaultHttpClient();
-//            HttpGet hg = new HttpGet(url);
-//            HttpResponse hr = hc.execute(hg);
-//            if (hr.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
-//                JSONObject response = new JSONObject(EntityUtils.toString(hr.getEntity()));
-//                translated = response.getJSONObject("responseData").getString("translatedText");
-//            }
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//        return translated;
-
-
-//        // Set the Client ID / Client Secret once per JVM. It is set statically and applies to all services
-//        Translate.setClientId("bdintershopping");
-//        Translate.setClientSecret("5h5S7KCTSFF53C4AQQBOlfQseTaHLax3Dmx52u8ejJ8");
-////        Translate.setClientSecret("5h5S7KCTSFF53d4AQQBOlfQseTaHLax3Dmx52u8ejJ8");
-//
-//        String translatedText = "";
-//        // Change Language to variable from settings.
-////        translatedText = Translate.execute(text, Language.AUTO_DETECT, Language.POLISH);
-//        translatedText = Translate.execute(text, Language.ENGLISH, Language.GERMAN);
-//        return translatedText;

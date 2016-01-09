@@ -17,6 +17,7 @@ import android.widget.Spinner;
 import java.util.List;
 
 import bendavid.is.intershopping.R;
+import bendavid.is.intershopping.entities.AppConfig;
 import bendavid.is.intershopping.entities.Languages;
 
 /**
@@ -54,15 +55,15 @@ public class SettingsActivity extends AppCompatActivity {
         final Spinner selectLanguageSpinner = (Spinner) findViewById(R.id.selectLanguageSpinner);
         // Get Config - language
 
-//        final Languages language = new Languages(AppConfig.first(AppConfig.class).getLanguage());
-        final Languages language = new Languages("Polish");
+        final Languages language = new Languages(AppConfig.first(AppConfig.class).getLanguage());
+//        final Languages language = new Languages("Polish");
 
         // Supermarket spinner
         ArrayAdapter<String> languageAdapter = new ArrayAdapter<>(getApplicationContext(),
                 R.layout.list_item_simple, language.getLanguageList());
         languageAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         selectLanguageSpinner.setAdapter(languageAdapter);
-//        selectLanguageSpinner.setSelection(language.getLanguageList().indexOf(language.getLanguage()));
+        selectLanguageSpinner.setSelection(language.getLanguageList().indexOf(language.getLanguage()));
         int pos = 0;
         for (String search : language.getLanguageList()) {
             if (search.equalsIgnoreCase(language.getLanguage())) {
