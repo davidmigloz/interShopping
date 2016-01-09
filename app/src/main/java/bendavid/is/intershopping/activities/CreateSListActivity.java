@@ -310,7 +310,7 @@ public class CreateSListActivity extends AppCompatActivity {
 //                    JSONObject jobj2 = new JSONObject(jobj.getString("responseData")); // mymemory
 //                    translatedText = jobj2.getString("translatedText");
 //                    Log.d(translatedText, translatedText);
-                }
+                } else saveWithoutTranslation();
             } catch (NumberFormatException e) {
                 e.printStackTrace();
                 saveWithoutTranslation();
