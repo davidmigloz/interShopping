@@ -232,7 +232,6 @@ public class ChartsFragment extends Fragment {
                 BarDataSet dataset = new BarDataSet(entrysYear.get(name), name);
                 dataset.setColor(ColorTemplate.COLORFUL_COLORS[i % ColorTemplate.COLORFUL_COLORS.length]);
                 dataset.setBarSpacePercent(35f);
-                dataset.
                 data.addDataSet(dataset);
                 i++;
             }
