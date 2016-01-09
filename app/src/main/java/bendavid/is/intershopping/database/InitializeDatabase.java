@@ -33,7 +33,7 @@ public final class InitializeDatabase {
         ShoppingList.deleteAll(ShoppingList.class);
         Supermarket.deleteAll(Supermarket.class);
         // Insert data
-        insertData(10);
+        insertData(5);
     }
 
     public static void insertData(int numSL) {

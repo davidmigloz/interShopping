@@ -61,6 +61,9 @@ public class ChartsFragment extends Fragment {
         return view;
     }
 
+    /**
+     * Prepare all the stuf related with the date pickers.
+     */
     private void prepareDatePickers() {
         final TextView minDateText = (TextView) view.findViewById(R.id.datefield1);
         final TextView maxDateText = (TextView) view.findViewById(R.id.datefield2);
@@ -71,42 +74,41 @@ public class ChartsFragment extends Fragment {
         maxDate = Calendar.getInstance();
         final SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
         sdf.setTimeZone(minDate.getTimeZone());
-        final Date date = new Date();
         minDateText.setText(sdf.format(minDate.getTime()));
         maxDateText.setText(sdf.format(maxDate.getTime()));
 
-        // Date pickers
-        final DatePickerDialog minDatePicker = new DatePickerDialog(getActivity(), new DatePickerDialog.OnDateSetListener() {
-            @Override
-            public void onDateSet(DatePicker view, int year, int month, int day) {
-                try {
-                    minDate.setTime((sdf.parse(day + "/" + month + 1 + "/" + year)));
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
-                minDateText.setText(sdf.format(minDate.getTime()));
-            }
-        }, minDate.get(Calendar.YEAR), minDate.get(Calendar.MONTH), minDate.get(Calendar.DAY_OF_MONTH));
-
+        // Min date date picker
+        final DatePickerDialog minDatePicker = new DatePickerDialog(getActivity(),
+                new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker view, int year, int month, int day) {
+                        try {
+                            minDate.setTime((sdf.parse(day + "/" + month + 1 + "/" + year)));
+                        } catch (ParseException e) {
+                            e.printStackTrace();
+                        }
+                        minDateText.setText(sdf.format(minDate.getTime()));
+                    }
+                }, minDate.get(Calendar.YEAR), minDate.get(Calendar.MONTH), minDate.get(Calendar.DAY_OF_MONTH));
         minDateText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 minDatePicker.show();
             }
         });
-
-        final DatePickerDialog maxDatePicker = new DatePickerDialog(getActivity(), new DatePickerDialog.OnDateSetListener() {
-            @Override
-            public void onDateSet(DatePicker view, int year, int month, int day) {
-                try {
-                    maxDate.setTime((sdf.parse(day + "/" + month + 1 + "/" + year)));
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
-                maxDateText.setText(sdf.format(maxDate.getTime()));
-            }
-        }, maxDate.get(Calendar.YEAR), maxDate.get(Calendar.MONTH), maxDate.get(Calendar.DAY_OF_MONTH));
-
+        // Max date date picker
+        final DatePickerDialog maxDatePicker = new DatePickerDialog(getActivity(),
+                new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker view, int year, int month, int day) {
+                        try {
+                            maxDate.setTime((sdf.parse(day + "/" + month + 1 + "/" + year)));
+                        } catch (ParseException e) {
+                            e.printStackTrace();
+                        }
+                        maxDateText.setText(sdf.format(maxDate.getTime()));
+                    }
+                }, maxDate.get(Calendar.YEAR), maxDate.get(Calendar.MONTH), maxDate.get(Calendar.DAY_OF_MONTH));
         maxDateText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -119,16 +121,17 @@ public class ChartsFragment extends Fragment {
      * Define the design of the chart.
      */
     private void prepareChart() {
+        // Chart
         chart1 = (BarChart) view.findViewById(R.id.chart1);
         chart1.setMaxVisibleValueCount(60);
         chart1.setDrawGridBackground(false);
         chart1.setDescription("");
-
+        chart1.setNoDataTextDescription("Select the range of dates...");
+        // X axis
         XAxis xAxis = chart1.getXAxis();
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
         xAxis.setDrawGridLines(false);
-        xAxis.setSpaceBetweenLabels(2);
-
+        // Y axis
         YAxisValueFormatter custom = new MyYAxisValueFormatter();
         YAxis leftAxis = chart1.getAxisLeft();
         leftAxis.setLabelCount(8, false);
@@ -140,34 +143,39 @@ public class ChartsFragment extends Fragment {
         rightAxis.setLabelCount(8, false);
         rightAxis.setValueFormatter(custom);
         rightAxis.setSpaceTop(15f);
-
+        // Legend
         Legend l = chart1.getLegend();
         l.setPosition(Legend.LegendPosition.BELOW_CHART_LEFT);
         l.setForm(Legend.LegendForm.CIRCLE);
         l.setFormSize(9f);
         l.setTextSize(11f);
         l.setXEntrySpace(4f);
-
+        // Initialize chart without data
         ArrayList<BarEntry> entries = new ArrayList<>();
         BarDataSet dataset = new BarDataSet(entries, "" + maxDate.get(Calendar.YEAR));
-        dataset.setColor(ColorTemplate.COLORFUL_COLORS[0]);
         ArrayList<String> labels = new ArrayList<>();
         BarData data = new BarData(labels, dataset);
         chart1.setData(data);
     }
 
+    /**
+     * Get the selected data and show it.
+     */
     private void drawData() {
         // Get shopping list in the dates range
         Select selectSLInRange = Select.from(ShoppingList.class)
-                .where(Condition.prop("date").eq(minDate.getTime().getTime()))
-                .or(Condition.prop("date").gt(minDate.getTime().getTime()))
+                .whereOr(Condition.prop("date").gt(minDate.getTime().getTime()),
+                        Condition.prop("date").eq(minDate.getTime().getTime()))
                 .and(Condition.prop("date").lt(maxDate.getTime().getTime()));
         List<ShoppingList> shoppingLists = selectSLInRange.list();
 
-
+        // Show number of shopping lists retrieved
         Toast.makeText(getActivity(),
-                "Get " + shoppingLists.size(), Toast.LENGTH_SHORT).show();
+                shoppingLists.size() + " shopping lists", Toast.LENGTH_SHORT).show();
 
+        // If there's one or more, draw the chart
+        // Each year is painted in one color. All the shopping list of one month must be
+        // merge to get the total spend money amount of that month
         if (shoppingLists.size() > 0) {
             String[] mMonths = new String[]{
                     "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
@@ -182,7 +190,7 @@ public class ChartsFragment extends Fragment {
             int year = cal.get(Calendar.YEAR);
             int month = cal.get(Calendar.MONTH);
             entrysYear.put(year + "", new ArrayList<BarEntry>());
-            labels.add(mMonths[month + 1 % 12]);
+            labels.add(mMonths[month % 12]);
 
             long totalPrice = 0;
             int newYear = 0;
@@ -205,27 +213,33 @@ public class ChartsFragment extends Fragment {
                     BarEntry be = new BarEntry(totalPrice, labels.size() - 1);
                     entrysYear.get(year + "").add(be);
                     // Add new month
-                    labels.add(mMonths[newMonth + 1 % 12]);
+                    labels.add(mMonths[newMonth % 12]);
                     totalPrice = shoppingLists.get(i).getTotalPrice();
                 }
                 year = newYear;
                 month = newMonth;
             }
             // Save last one
-            BarEntry be = new BarEntry(totalPrice, shoppingLists.size());
+            BarEntry be = new BarEntry(totalPrice, labels.size() - 1);
             entrysYear.get(year + "").add(be);
 
-            List<BarDataSet> dataSets = new ArrayList<>(entrysYear.keySet().size());
+            Toast.makeText(getActivity(),
+                    entrysYear + " shopping lists", Toast.LENGTH_SHORT).show();
+
+            BarData data = new BarData(labels);
             int i = 0;
             for (String name : entrysYear.keySet()) {
                 BarDataSet dataset = new BarDataSet(entrysYear.get(name), name);
                 dataset.setColor(ColorTemplate.COLORFUL_COLORS[i % ColorTemplate.COLORFUL_COLORS.length]);
-                dataSets.add(dataset);
+                dataset.setBarSpacePercent(35f);
+                dataset.
+                data.addDataSet(dataset);
                 i++;
             }
-            BarData data = new BarData(labels, dataSets);
+            data.setValueTextSize(10f);
             chart1.setData(data);
-            chart1.invalidate();
+            chart1.notifyDataSetChanged(); // let the chart know it's data changed
+            chart1.invalidate(); // refresh
             chart1.animateXY(1000, 1000);
         }
     }
