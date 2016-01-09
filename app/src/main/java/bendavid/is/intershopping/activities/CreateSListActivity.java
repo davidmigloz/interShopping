@@ -45,6 +45,8 @@ import java.util.Date;
 import java.util.List;
 
 import bendavid.is.intershopping.R;
+import bendavid.is.intershopping.entities.AppConfig;
+import bendavid.is.intershopping.entities.Languages;
 import bendavid.is.intershopping.entities.ListItem;
 import bendavid.is.intershopping.entities.ShoppingList;
 import bendavid.is.intershopping.entities.Supermarket;
@@ -175,9 +177,11 @@ public class CreateSListActivity extends AppCompatActivity {
         } else {
             if (date != null && supermarket != null && newItems.size() > 0 && !submitted) {
                 submitted = true;
-                ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-                if (connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE).getState() == NetworkInfo.State.CONNECTED ||
-                        connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI).getState() == NetworkInfo.State.CONNECTED) {
+                // Check connection
+                ConnectivityManager connMgr = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+                NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
+                if (networkInfo != null && networkInfo.isConnected()) {
+
                     //we are connected to a network
 
                     class backgroundTranslation extends AsyncTask<Void, Void, Void> {
@@ -274,10 +278,9 @@ public class CreateSListActivity extends AppCompatActivity {
     public String translate(String text) throws Exception {
         JSONObject jobj;
         String json = "", translatedText = "";
-        // Hello%20World
-        text = text.replace(System.getProperty("line.separator"), " ");
         text = URLEncoder.encode(text, "utf-8");
-        String lang = "de";
+        Languages language = new Languages(AppConfig.first(AppConfig.class).getLanguage());
+        String lang = language.getCode();
 //        URL url = new URL("http://api.mymemory.translated.net/get?q=" + text + "!&langpair=Autodetect|de");
         URL url = new URL("https://translate.yandex.net/api/v1.5/tr.json/translate?" +
                 "key=" + "trnsl.1.1.20160107T140340Z.3a9a6b4696483460.12c87164fd285e07c39ff4fde63b5c98feef6dd4" +

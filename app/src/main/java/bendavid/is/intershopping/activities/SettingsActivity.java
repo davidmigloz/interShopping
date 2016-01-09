@@ -54,8 +54,8 @@ public class SettingsActivity extends AppCompatActivity {
     private void showSettings() {
         final Spinner selectLanguageSpinner = (Spinner) findViewById(R.id.selectLanguageSpinner);
         // Get Config - language
-
-        final Languages language = new Languages(AppConfig.first(AppConfig.class).getLanguage());
+        final AppConfig appConfig = AppConfig.first(AppConfig.class);
+        final Languages language = new Languages(appConfig.getLanguage());
 //        final Languages language = new Languages("Polish");
 
         // Supermarket spinner
@@ -64,23 +64,14 @@ public class SettingsActivity extends AppCompatActivity {
         languageAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         selectLanguageSpinner.setAdapter(languageAdapter);
         selectLanguageSpinner.setSelection(language.getLanguageList().indexOf(language.getLanguage()));
-        int pos = 0;
-        for (String search : language.getLanguageList()) {
-            if (search.equalsIgnoreCase(language.getLanguage())) {
-                selectLanguageSpinner.setSelection(pos);
-                Log.d("pos: ", String.valueOf(pos));
-                break;
-            }
-            pos++;
-        }
-        Log.d(language.getLanguage(), String.valueOf(pos));
-
 
         // Select supermarket
         selectLanguageSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 language.setLanguage(language.getLanguageList().get(position));
+                appConfig.setLanguage(language.getLanguageList().get(position));
+                appConfig.save();
                 selectLanguageSpinner.setSelection(position);
             }
 
