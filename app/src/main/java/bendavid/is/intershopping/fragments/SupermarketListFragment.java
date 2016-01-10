@@ -121,7 +121,7 @@ public class SupermarketListFragment extends Fragment {
         @Override
         public ViewHolder onCreateViewHolder(ViewGroup parent, int position) {
             View view = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.list_item_icon, parent, false);
+                    .inflate(R.layout.list_supermarkets_item, parent, false);
             return new ViewHolder(view);
         }
 

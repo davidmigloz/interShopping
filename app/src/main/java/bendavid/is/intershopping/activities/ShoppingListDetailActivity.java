@@ -207,7 +207,7 @@ public class ShoppingListDetailActivity extends AppCompatActivity {
             public ViewHolder(View view) {
                 super(view);
                 mView = view;
-                icon = (ImageView) view.findViewById(R.id.letter_sm);
+                icon = (ImageView) view.findViewById(R.id.item_icon);
                 item_name = (TextView) view.findViewById(R.id.item_name);
             }
         }

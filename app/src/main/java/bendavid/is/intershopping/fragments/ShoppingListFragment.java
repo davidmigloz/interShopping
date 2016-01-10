@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
@@ -123,7 +124,7 @@ public class ShoppingListFragment extends Fragment {
         @Override
         public ViewHolder onCreateViewHolder(ViewGroup parent, int position) {
             View view = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.list_item_icon, parent, false);
+                    .inflate(R.layout.list_shopping_lists_item, parent, false);
             return new ViewHolder(view);
         }
 
@@ -135,11 +136,16 @@ public class ShoppingListFragment extends Fragment {
             // ShoppingLists's icon
             Drawable icon = ContextCompat.getDrawable(context, R.drawable.ic_shopping_cart);
             viewHolder.icon.setImageDrawable(icon);
-            // Supermarket name
-            viewHolder.item_name.setText(shoppingLists.get(position).toString()
-                    + " (" + shoppingLists.get(position).getTotalPrice() + "€)");
+            // ShoppingLists name
+            viewHolder.itemName.setText(shoppingLists.get(position).toString());
+            // Supermarket
+            viewHolder.supermarketName.setText(shoppingLists.get(position).getSupermarked().toString());
+            // Number of items bought
+            viewHolder.boughtItems.setText("0/0");
+            // Total price
+            viewHolder.totalPrice.setText(shoppingLists.get(position).getTotalPrice() + "€");
             // Listener: go to shopping list when item is pressed
-            viewHolder.mView.setOnClickListener(new View.OnClickListener() {
+            viewHolder.cv.setOnClickListener(new View.OnClickListener() {
                 /**
                  * When you touch one shopping list, you move to the detail view.
                  */
@@ -172,15 +178,21 @@ public class ShoppingListFragment extends Fragment {
         }
 
         public static class ViewHolder extends RecyclerView.ViewHolder {
-            public final View mView;
-            public ImageView icon;
-            public TextView item_name;
+            final CardView cv;
+            ImageView icon;
+            TextView itemName;
+            TextView supermarketName;
+            TextView boughtItems;
+            TextView totalPrice;
 
             public ViewHolder(View view) {
                 super(view);
-                mView = view;
-                icon = (ImageView) view.findViewById(R.id.letter_sm);
-                item_name = (TextView) view.findViewById(R.id.item_name);
+                cv = (CardView) itemView.findViewById(R.id.cv);
+                icon = (ImageView) view.findViewById(R.id.item_icon);
+                itemName = (TextView) view.findViewById(R.id.item_name);
+                supermarketName = (TextView) view.findViewById(R.id.supermarket_name);
+                boughtItems = (TextView) view.findViewById(R.id.bought_items);
+                totalPrice = (TextView) view.findViewById(R.id.total_price);
             }
         }
     }
