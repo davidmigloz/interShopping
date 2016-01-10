@@ -12,20 +12,20 @@ import java.util.List;
  */
 public class ShoppingList extends SugarRecord implements Serializable, Comparable<ShoppingList> {
     private Date date;
-    private Supermarket supermarked;
+    private Supermarket supermarket;
     private long totalPrice;
 
     public ShoppingList() {
     }
 
-    public ShoppingList(Date date, Supermarket supermarked) {
+    public ShoppingList(Date date, Supermarket supermarket) {
         this.date = date;
-        this.supermarked = supermarked;
+        this.supermarket = supermarket;
         totalPrice = 0L;
     }
 
-    public Supermarket getSupermarked() {
-        return supermarked;
+    public Supermarket getSupermarket() {
+        return supermarket;
     }
 
     public long getTotalPrice() {

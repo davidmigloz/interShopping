@@ -39,6 +39,7 @@
         <activity android:name=".activities.CreateSupermarketActivity"></activity>
         <activity android:name=".activities.SettingsActivity"></activity>
         <activity android:name=".activities.StatsActivity"></activity>
+        <activity android:name=".activities.SupermarketDetailActivity"></activity>
 
     </application>
 

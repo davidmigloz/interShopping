@@ -21,6 +21,7 @@ import java.util.List;
 import bendavid.is.intershopping.R;
 import bendavid.is.intershopping.activities.CreateSupermarketActivity;
 import bendavid.is.intershopping.activities.InterShoppingActivity;
+import bendavid.is.intershopping.activities.SupermarketDetailActivity;
 import bendavid.is.intershopping.entities.Supermarket;
 
 /**
@@ -67,7 +68,7 @@ public class SupermarketListFragment extends Fragment {
             return;
         }
         // If it's visible, set the right action to the FloatingActionButton and show it
-        InterShoppingActivity mainActivity = (InterShoppingActivity)getActivity();
+        InterShoppingActivity mainActivity = (InterShoppingActivity) getActivity();
         mainActivity.fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -111,7 +112,7 @@ public class SupermarketListFragment extends Fragment {
          * It's called when views need to be created from given ViewHolder.
          */
         @Override
-        public void onBindViewHolder(final ViewHolder viewHolder, int position) {
+        public void onBindViewHolder(final ViewHolder viewHolder, final int position) {
             // Supermarket's icon
             Drawable icon = ContextCompat.getDrawable(context, R.drawable.ic_calendar_24);
             viewHolder.icon.setImageDrawable(icon);
@@ -122,8 +123,11 @@ public class SupermarketListFragment extends Fragment {
             viewHolder.mView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Toast.makeText(v.getContext(),
-                            "SupermarketEntity Pressed", Toast.LENGTH_SHORT).show();
+                    Supermarket sm = supermarkets.get(position);
+
+                    Intent i = new Intent(context, SupermarketDetailActivity.class);
+                    i.putExtra("supermarket-id", sm.getId());
+                    context.startActivity(i);
                 }
             });
         }
