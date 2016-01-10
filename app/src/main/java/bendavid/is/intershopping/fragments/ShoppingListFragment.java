@@ -7,8 +7,10 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -44,11 +46,28 @@ public class ShoppingListFragment extends Fragment {
         // Get Shopping lists
         List<ShoppingList> shoppingLists = ShoppingList.listAll(ShoppingList.class);
         Collections.sort(shoppingLists, Collections.reverseOrder());
-
         // LinearLayoutManager provides a similar implementation to a ListView
         recyclerView.setLayoutManager(new LinearLayoutManager(recyclerView.getContext()));
-        recyclerView.setAdapter(new ShoppingListRecyclerViewAdapter(getActivity(),
-                shoppingLists));
+        final ShoppingListRecyclerViewAdapter adapter = new ShoppingListRecyclerViewAdapter(
+                getActivity(), shoppingLists);
+        recyclerView.setAdapter(adapter);
+        // For swipe and drag
+        ItemTouchHelper mIth = new ItemTouchHelper(
+                new ItemTouchHelper.SimpleCallback(ItemTouchHelper.UP | ItemTouchHelper.DOWN,
+                        ItemTouchHelper.RIGHT) {
+                    @Override
+                    public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder,
+                                          RecyclerView.ViewHolder target) {
+                        adapter.onItemMove(viewHolder.getAdapterPosition(), target.getAdapterPosition());
+                        return true;
+                    }
+
+                    @Override
+                    public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
+                        adapter.onItemDismiss(viewHolder.getAdapterPosition());
+                    }
+                });
+        mIth.attachToRecyclerView(recyclerView);
     }
 
     @Override
@@ -96,7 +115,7 @@ public class ShoppingListFragment extends Fragment {
          */
         @Override
         public int getItemCount() {
-            return shoppingLists.size();
+            return shoppingLists == null ? 0 : shoppingLists.size();
         }
 
         /**
@@ -105,7 +124,7 @@ public class ShoppingListFragment extends Fragment {
         @Override
         public ViewHolder onCreateViewHolder(ViewGroup parent, int position) {
             View view = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.list_item_icon, parent, false);
+                    .inflate(R.layout.list_shopping_lists_item, parent, false);
             return new ViewHolder(view);
         }
 
@@ -117,19 +136,22 @@ public class ShoppingListFragment extends Fragment {
             // ShoppingLists's icon
             Drawable icon = ContextCompat.getDrawable(context, R.drawable.ic_shopping_cart);
             viewHolder.icon.setImageDrawable(icon);
-            // Supermarket name
-            viewHolder.item_name.setText(shoppingLists.get(position).toString()
-                    + " (" + shoppingLists.get(position).getTotalPrice() + "€)");
-
-            // Listener
-            viewHolder.mView.setOnClickListener(new View.OnClickListener() {
+            // ShoppingLists name
+            viewHolder.itemName.setText(shoppingLists.get(position).toString());
+            // Supermarket
+            viewHolder.supermarketName.setText(shoppingLists.get(position).getSupermarked().toString());
+            // Number of items bought
+            viewHolder.boughtItems.setText("0/0");
+            // Total price
+            viewHolder.totalPrice.setText(shoppingLists.get(position).getTotalPrice() + "€");
+            // Listener: go to shopping list when item is pressed
+            viewHolder.cv.setOnClickListener(new View.OnClickListener() {
                 /**
                  * When you touch one shopping list, you move to the detail view.
                  */
                 @Override
                 public void onClick(View v) {
                     ShoppingList sl = shoppingLists.get(position);
-
                     Intent i = new Intent(context, ShoppingListDetailActivity.class);
                     i.putExtra("shopping-list-id", sl.getId());
                     context.startActivity(i);
@@ -137,16 +159,40 @@ public class ShoppingListFragment extends Fragment {
             });
         }
 
+        /**
+         * When a shoppingLists is removed, delete it from database.
+         */
+        public void onItemDismiss(int position) {
+            shoppingLists.get(position).delete();
+            shoppingLists.remove(position);
+            notifyItemRemoved(position);
+        }
+
+        /**
+         * When a shoppingLists is moved, save position.
+         */
+        public void onItemMove(int fromPosition, int toPosition) {
+            ShoppingList prev = shoppingLists.remove(fromPosition);
+            shoppingLists.add(toPosition > fromPosition ? toPosition - 1 : toPosition, prev);
+            notifyItemMoved(fromPosition, toPosition);
+        }
+
         public static class ViewHolder extends RecyclerView.ViewHolder {
-            public final View mView;
-            public ImageView icon;
-            public TextView item_name;
+            final CardView cv;
+            ImageView icon;
+            TextView itemName;
+            TextView supermarketName;
+            TextView boughtItems;
+            TextView totalPrice;
 
             public ViewHolder(View view) {
                 super(view);
-                mView = view;
-                icon = (ImageView) view.findViewById(R.id.letter_sm);
-                item_name = (TextView) view.findViewById(R.id.item_name);
+                cv = (CardView) itemView.findViewById(R.id.cv);
+                icon = (ImageView) view.findViewById(R.id.item_icon);
+                itemName = (TextView) view.findViewById(R.id.item_name);
+                supermarketName = (TextView) view.findViewById(R.id.supermarket_name);
+                boughtItems = (TextView) view.findViewById(R.id.bought_items);
+                totalPrice = (TextView) view.findViewById(R.id.total_price);
             }
         }
     }

@@ -6,7 +6,7 @@
     android:padding="15dp">
 
     <ImageView
-        android:id="@+id/letter_sm"
+        android:id="@+id/item_icon"
         android:layout_width="20dp"
         android:layout_height="20dp"
         android:scaleType="fitXY"
@@ -19,7 +19,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
-        android:layout_toRightOf="@+id/letter_sm"
+        android:layout_toRightOf="@+id/item_icon"
         android:layout_centerVertical="true"
         android:textAppearance="?attr/textAppearanceListItem"/>
 
