@@ -11,6 +11,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
@@ -18,11 +19,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import bendavid.is.intershopping.R;
+import bendavid.is.intershopping.entities.Supermarket;
 import bendavid.is.intershopping.fragments.SupermarketInfoFragment;
 import bendavid.is.intershopping.fragments.SupermarketPProductsFragment;
 
 public class SupermarketDetailActivity extends AppCompatActivity {
     private DrawerLayout mDrawerLayout;
+    private ActionBar ab;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,7 +35,7 @@ public class SupermarketDetailActivity extends AppCompatActivity {
         // Action bar
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        final ActionBar ab = getSupportActionBar();
+        ab = getSupportActionBar();
         assert ab != null;
         ab.setHomeAsUpIndicator(R.drawable.ic_arrow_back);
         ab.setDisplayHomeAsUpEnabled(true);
@@ -51,10 +54,21 @@ public class SupermarketDetailActivity extends AppCompatActivity {
             setupViewPager(viewPager);
         }
 
+        showSupermarkedInitial();
+
         // Tabs
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         assert viewPager != null;
         tabLayout.setupWithViewPager(viewPager);
+    }
+
+    private void showSupermarkedInitial() {
+        // Get id of the shopping list clicked
+        Long supermarketID = (Long) getIntent().getExtras().getSerializable("supermarket-id");
+        // Get the shopping list
+        Supermarket sm = Supermarket.findById(Supermarket.class, supermarketID);
+        // Set action bar title
+        ab.setTitle(sm.toString());
     }
 
     /**
@@ -78,6 +92,11 @@ public class SupermarketDetailActivity extends AppCompatActivity {
 
     private void setupViewPager(ViewPager viewPager) {
         Adapter adapter = new Adapter(getSupportFragmentManager());
+//        SupermarketInfoFragment smif = new SupermarketInfoFragment();
+//        smif.setArguments(getIntent().getExtras());
+//        getSupportFragmentManager().beginTransaction().add(
+//                android.R.id.content, smif).commit();
+//        adapter.addFragment(smif, "Info");
         adapter.addFragment(new SupermarketInfoFragment(), "Info");
         adapter.addFragment(new SupermarketPProductsFragment(), "Purchased Products");
         viewPager.setAdapter(adapter);

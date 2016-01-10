@@ -15,7 +15,6 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.LayoutInflater;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,7 +26,6 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -132,7 +130,7 @@ public class ShoppingListDetailActivity extends AppCompatActivity {
         // ShoppingLists name
         itemName.setText(shoppingList.toString());
         // Supermarket
-        supermarketName.setText(shoppingList.getSupermarked().toString());
+        supermarketName.setText(shoppingList.getSupermarket().toString());
         // Number of items bought
         boughtItems.setText(this.getString(R.string.num_bought_total,
                 shoppingList.getNumItemsBought(), shoppingList.getNumItems()));
