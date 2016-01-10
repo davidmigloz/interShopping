@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v4.widget.DrawerLayout
-    android:id="@+id/drawer_layout"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/drawer_layout"
@@ -9,7 +8,6 @@
     android:fitsSystemWindows="true">
 
     <android.support.design.widget.CoordinatorLayout
-        android:id="@+id/main_content"
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/main_content"
@@ -41,7 +39,7 @@
                 android:padding="10dp"
                 app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-                <include layout="@layout/list_shopping_lists_item"/>
+                <include layout="@layout/list_shopping_lists_item" />
 
                 <android.support.v7.widget.RecyclerView
                     android:id="@+id/recyclerview"
@@ -51,7 +49,7 @@
                     android:layout_marginBottom="0dp"
                     android:layout_marginLeft="30dp"
                     android:layout_marginRight="15dp"
-                    android:layout_marginTop="10dp"/>
+                    android:layout_marginTop="10dp" />
 
             </RelativeLayout>
 
@@ -78,7 +76,7 @@
                         android:labelFor="@+id/price"
                         android:text="@string/enter_price"
                         android:textColor="@color/primary_text"
-                        android:textSize="20sp"/>
+                        android:textSize="20sp" />
 
                     <EditText
                         android:id="@+id/price"
@@ -87,7 +85,7 @@
                         android:layout_below="@id/label1"
                         android:inputType="number"
                         android:maxWidth="100dp"
-                        android:singleLine="true"/>
+                        android:singleLine="true" />
 
                     <Spinner
                         android:id="@+id/price_type"
@@ -96,7 +94,7 @@
                         android:layout_alignBaseline="@+id/price"
                         android:layout_below="@id/label1"
                         android:layout_toRightOf="@+id/price"
-                        android:spinnerMode="dropdown"/>
+                        android:spinnerMode="dropdown" />
 
                     <View
                         android:id="@+id/separator1"
@@ -105,7 +103,7 @@
                         android:layout_below="@id/price"
                         android:layout_marginBottom="10dp"
                         android:layout_marginTop="10dp"
-                        android:background="@android:color/darker_gray"/>
+                        android:background="@android:color/darker_gray" />
 
                     <TextView
                         android:id="@+id/label2"
@@ -115,7 +113,7 @@
                         android:labelFor="@+id/quantity"
                         android:text="@string/quantity"
                         android:textColor="@color/primary_text"
-                        android:textSize="20sp"/>
+                        android:textSize="20sp" />
 
                     <EditText
                         android:id="@+id/quantity"
@@ -125,7 +123,7 @@
                         android:inputType="number"
                         android:maxWidth="100dp"
                         android:singleLine="true"
-                        android:text="@string/uno"/>
+                        android:text="@string/uno" />
 
                     <TextView
                         android:id="@+id/label3"
@@ -137,7 +135,7 @@
                         android:layout_toRightOf="@+id/quantity"
                         android:text="@string/unit"
                         android:textColor="@color/primary_text"
-                        android:textSize="17sp"/>
+                        android:textSize="17sp" />
 
                     <Button
                         android:id="@+id/ok_button"
@@ -145,7 +143,7 @@
                         android:layout_height="wrap_content"
                         android:layout_alignParentRight="true"
                         android:layout_below="@id/quantity"
-                        android:text="@string/ok"/>
+                        android:text="@string/ok" />
 
                     <Button
                         android:id="@+id/skip_button"
@@ -153,7 +151,7 @@
                         android:layout_height="wrap_content"
                         android:layout_below="@id/quantity"
                         android:layout_marginRight="5dp"
-                        android:text="@string/skip"/>
+                        android:text="@string/skip" />
 
                 </RelativeLayout>
             </RelativeLayout>
