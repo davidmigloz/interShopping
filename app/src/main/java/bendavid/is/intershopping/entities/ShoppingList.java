@@ -42,12 +42,12 @@ public class ShoppingList extends SugarRecord implements Serializable, Comparabl
         return sdf.format(date);
     }
 
-    public void updateTotalPrice(){
+    public void updateTotalPrice() {
         // Get items of the shopping list
         List<ListItem> listItems = ListItem.find(ListItem.class,
                 "shopping_list = ?", this.getId().toString());
         long totalPrice = 0L;
-        for(ListItem item : listItems){
+        for (ListItem item : listItems) {
             totalPrice += item.getPrice();
         }
         this.totalPrice = totalPrice;
@@ -56,5 +56,9 @@ public class ShoppingList extends SugarRecord implements Serializable, Comparabl
     @Override
     public int compareTo(ShoppingList another) {
         return this.getDate().compareTo(another.getDate());
+    }
+
+    public Supermarket getSupermarked() {
+        return supermarket;
     }
 }

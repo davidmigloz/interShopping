@@ -46,7 +46,10 @@ public class ListItem extends SugarRecord {
     }
 
     public String getTranslation() {
-        return translation;
+        if (translation != null)
+            return translation;
+        else
+            return "-";
     }
 
     public long getPrice() {

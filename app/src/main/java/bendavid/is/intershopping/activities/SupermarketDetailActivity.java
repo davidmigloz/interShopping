@@ -13,12 +13,14 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import bendavid.is.intershopping.R;
+import bendavid.is.intershopping.entities.ShoppingList;
 import bendavid.is.intershopping.entities.Supermarket;
 import bendavid.is.intershopping.fragments.SupermarketInfoFragment;
 import bendavid.is.intershopping.fragments.SupermarketPProductsFragment;
@@ -97,8 +99,18 @@ public class SupermarketDetailActivity extends AppCompatActivity {
 //        getSupportFragmentManager().beginTransaction().add(
 //                android.R.id.content, smif).commit();
 //        adapter.addFragment(smif, "Info");
-        adapter.addFragment(new SupermarketInfoFragment(), "Info");
-        adapter.addFragment(new SupermarketPProductsFragment(), "Purchased Products");
+//        adapter.addFragment(new SupermarketInfoFragment(), "Info");
+        Bundle args = new Bundle();
+        args.putLong("supermarket-id", (long) getIntent().getExtras().getSerializable("supermarket-id"));
+        SupermarketPProductsFragment smppf = new SupermarketPProductsFragment();
+        SupermarketInfoFragment smif = new SupermarketInfoFragment();
+        smif.setArguments(args);
+        smppf.setArguments(args);
+        long sid = (long) getIntent().getExtras().getSerializable("supermarket-id");
+        Log.d("supermarket-id from", String.valueOf(sid));
+
+        adapter.addFragment(smif, "Info");
+        adapter.addFragment(smppf, "Shopping List");
         viewPager.setAdapter(adapter);
     }
 

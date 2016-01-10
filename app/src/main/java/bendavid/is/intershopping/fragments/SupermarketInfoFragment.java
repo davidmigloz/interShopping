@@ -16,8 +16,7 @@ public class SupermarketInfoFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = (View) inflater.inflate(
-                R.layout.charts, container, false);
-
+                R.layout.create_supermarket, container, false);
         return view;
     }
 }
