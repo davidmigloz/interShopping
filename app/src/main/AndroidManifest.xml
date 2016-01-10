@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="bendavid.is.intershopping">
+<manifest package="bendavid.is.intershopping"
+          xmlns:android="http://schemas.android.com/apk/res/android">
 
 
-    <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
 
     <application
         android:name="com.orm.SugarApp"
@@ -15,31 +15,31 @@
         android:theme="@style/Theme.InterShopping">
         <meta-data
             android:name="DATABASE"
-            android:value="intershopping.db" />
+            android:value="intershopping.db"/>
         <meta-data
             android:name="VERSION"
-            android:value="2.5" />
+            android:value="2.5"/>
         <meta-data
             android:name="QUERY_LOG"
-            android:value="true" />
+            android:value="true"/>
         <meta-data
             android:name="DOMAIN_PACKAGE_NAME"
-            android:value="bendavid.is.intershopping.entities" />
+            android:value="bendavid.is.intershopping.entities"/>
 
         <activity android:name=".activities.InterShoppingActivity">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+                <action android:name="android.intent.action.MAIN"/>
 
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.LAUNCHER" />
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity android:name=".activities.ShoppingListDetailActivity" />
-        <activity android:name=".activities.CreateSListActivity" />
-        <activity android:name=".activities.CreateSupermarketActivity" />
-        <activity android:name=".activities.SettingsActivity" />
-        <activity android:name=".activities.StatsActivity" />
-        <activity android:name=".activities.SupermarketDetailActivity"></activity>
+        <activity android:name=".activities.ShoppingListDetailActivity"/>
+        <activity android:name=".activities.CreateSListActivity"/>
+        <activity android:name=".activities.CreateSupermarketActivity"/>
+        <activity android:name=".activities.SettingsActivity"/>
+        <activity android:name=".activities.StatsActivity"/>
+        <activity android:name=".activities.SupermarketDetailActivity"/>
 
     </application>
 
