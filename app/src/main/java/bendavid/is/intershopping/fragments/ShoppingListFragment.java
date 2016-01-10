@@ -141,7 +141,8 @@ public class ShoppingListFragment extends Fragment {
             // Supermarket
             viewHolder.supermarketName.setText(shoppingLists.get(position).getSupermarked().toString());
             // Number of items bought
-            viewHolder.boughtItems.setText("0/0");
+            viewHolder.boughtItems.setText(shoppingLists.get(position).getNumItemsBought() +
+                    "/" + shoppingLists.get(position).getNumItems());
             // Total price
             viewHolder.totalPrice.setText(shoppingLists.get(position).getTotalPrice() + "€");
             // Listener: go to shopping list when item is pressed

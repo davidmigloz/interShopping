@@ -199,6 +199,8 @@ public class CreateSListActivity extends AppCompatActivity {
                                 }
                                 new ListItem(item, translatedText, newSL).save();
                             }
+                            newSL.updateItemsInfo();
+                            newSL.save();
                             return null;
                         }
 
@@ -334,6 +336,7 @@ public class CreateSListActivity extends AppCompatActivity {
         for (String item : newItems) {
             new ListItem(item, newSL).save();
         }
+        newSL.updateItemsInfo();
         Toast.makeText(getApplicationContext(),
                 "...New Shopping List saved without translation.", Toast.LENGTH_SHORT).show();
         Intent intent = new Intent(CreateSListActivity.this, InterShoppingActivity.class);

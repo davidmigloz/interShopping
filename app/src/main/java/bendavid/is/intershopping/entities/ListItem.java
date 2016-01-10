@@ -11,6 +11,7 @@ public class ListItem extends SugarRecord {
     private String translation;
     private long price;
     private PriceType priceType;
+    private long quantity;
     private ShoppingList shoppingList;
     private boolean purchased;
 
@@ -30,17 +31,6 @@ public class ListItem extends SugarRecord {
         this.purchased = false;
     }
 
-    public ListItem(String name, long price, PriceType priceType, ShoppingList shoppingList) {
-        this.name = name;
-        this.price = price;
-        this.priceType = priceType;
-        this.shoppingList = shoppingList;
-    }
-
-    public enum PriceType {
-        MONEY_UNIT, MONEY_KILO
-    }
-
     public String getName() {
         return name;
     }
@@ -49,19 +39,43 @@ public class ListItem extends SugarRecord {
         return translation;
     }
 
-    public long getPrice() {
-        return price;
+    public long getTotalPrice(){
+        return price * quantity;
     }
-
     public PriceType getPriceType() {
         return priceType;
     }
 
     public boolean isPurchased() {
-        return this.purchased;
+        return purchased;
     }
 
     public void changeStatus(boolean purchased) {
         this.purchased = purchased;
+    }
+
+    public void buy(long price, PriceType priceType, long quantity){
+        this.price = price;
+        this.priceType = priceType;
+        this.quantity = quantity;
+        this.purchased = true;
+    }
+
+
+    public enum PriceType {
+        MONEY_UNIT("€/unit"),
+        MONEY_KILO("€/kg"),
+        MONEY_GRAM("€/g");
+
+        private final String description;
+
+        PriceType(String description) {
+            this.description = description;
+        }
+
+        @Override
+        public String toString() {
+            return this.description;
+        }
     }
 }

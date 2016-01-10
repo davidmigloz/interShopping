@@ -14,6 +14,8 @@ public class ShoppingList extends SugarRecord implements Serializable, Comparabl
     private Date date;
     private Supermarket supermarked;
     private long totalPrice;
+    private int numItems;
+    private int numItemsBought;
 
     public ShoppingList() {
     }
@@ -22,6 +24,8 @@ public class ShoppingList extends SugarRecord implements Serializable, Comparabl
         this.date = date;
         this.supermarked = supermarked;
         totalPrice = 0L;
+        numItems = 0;
+        numItemsBought = 0;
     }
 
     public Supermarket getSupermarked() {
@@ -36,25 +40,38 @@ public class ShoppingList extends SugarRecord implements Serializable, Comparabl
         return date;
     }
 
-    @Override
-    public String toString() {
-        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-        return sdf.format(date);
+    public int getNumItems() {
+        return numItems;
     }
 
-    public void updateTotalPrice(){
+    public int getNumItemsBought() {
+        return numItemsBought;
+    }
+
+    public void updateItemsInfo(){
         // Get items of the shopping list
         List<ListItem> listItems = ListItem.find(ListItem.class,
                 "shopping_list = ?", this.getId().toString());
-        long totalPrice = 0L;
+        numItems = 0;
+        numItemsBought = 0;
+        totalPrice = 0L;
         for(ListItem item : listItems){
-            totalPrice += item.getPrice();
+            numItems++;
+            if(item.isPurchased()){
+                numItemsBought++;
+                totalPrice += item.getTotalPrice();
+            }
         }
-        this.totalPrice = totalPrice;
     }
 
     @Override
     public int compareTo(ShoppingList another) {
         return this.getDate().compareTo(another.getDate());
+    }
+
+    @Override
+    public String toString() {
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        return sdf.format(date);
     }
 }
