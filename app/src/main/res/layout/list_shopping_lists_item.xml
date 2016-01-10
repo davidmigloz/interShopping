@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="utf-8"?>
 <!-- Shopping list item of the recycler-view -->
 <android.support.v7.widget.CardView
     android:id="@+id/cv"
@@ -42,8 +41,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
-            android:textColor="@color/primary"
-            android:text="0/0"/>
+            android:textColor="@color/primary"/>
 
         <TextView
             android:id="@+id/total_price"
@@ -52,7 +50,8 @@
             android:layout_alignBaseline="@id/supermarket_name"
             android:layout_alignParentRight="true"
             android:textColor="@color/accent_dark"
-            android:textSize="20sp"/>
+            android:textSize="20sp"
+            />
 
     </RelativeLayout>
 

@@ -84,14 +84,20 @@ public final class InitializeDatabase {
 
         // Add items to the shopping lists
         for (ShoppingList sl : shoppingLists) {
-            int nItems = 5 + random.nextInt(10); // Minimum 5 items
+            int nItems = random.nextInt(5);
+            // Items purchased
             for (int i = 0; i < nItems; i++) {
-                //ListItem it = new ListItem(itemsNames[random.nextInt(itemsNames.length)], sl);
-                ListItem it = new ListItem(itemsNames[random.nextInt(itemsNames.length)],
-                        randInt(1, 10), ListItem.PriceType.MONEY_UNIT, sl);
+                ListItem it = new ListItem(itemsNames[random.nextInt(itemsNames.length)], sl);
+                it.buy(randInt(1, 10), ListItem.PriceType.MONEY_UNIT, randInt(1, 10));
                 it.save();
             }
-            sl.updateTotalPrice();
+            // Items to purchase
+            nItems = random.nextInt(10);
+            for (int i = 0; i < nItems; i++) {
+                ListItem it = new ListItem(itemsNames[random.nextInt(itemsNames.length)], sl);
+                it.save();
+            }
+            sl.updateItemsInfo();
             sl.save();
         }
     }

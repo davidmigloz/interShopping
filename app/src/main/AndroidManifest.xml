@@ -18,7 +18,7 @@
             android:value="intershopping.db" />
         <meta-data
             android:name="VERSION"
-            android:value="2.2" />
+            android:value="2.4" />
         <meta-data
             android:name="QUERY_LOG"
             android:value="true" />
@@ -34,12 +34,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activities.ShoppingListDetailActivity"></activity>
-        <activity android:name=".activities.CreateSListActivity"></activity>
-        <activity android:name=".activities.CreateSupermarketActivity"></activity>
-        <activity android:name=".activities.SettingsActivity"></activity>
-        <activity android:name=".activities.StatsActivity"></activity>
-        <activity android:name=".activities.SupermarketDetailActivity"></activity>
+        <activity android:name=".activities.ShoppingListDetailActivity"/>
+        <activity android:name=".activities.CreateSListActivity"/>
+        <activity android:name=".activities.CreateSupermarketActivity"/>
+        <activity android:name=".activities.SettingsActivity"/>
+        <activity android:name=".activities.StatsActivity"/>
 
     </application>
 
