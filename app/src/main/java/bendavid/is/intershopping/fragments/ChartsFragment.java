@@ -38,6 +38,8 @@ import java.util.Map;
 import bendavid.is.intershopping.R;
 import bendavid.is.intershopping.entities.ShoppingList;
 
+import static java.util.Calendar.*;
+
 public class ChartsFragment extends Fragment {
     private View view;
     private Calendar minDate;
@@ -47,7 +49,7 @@ public class ChartsFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        view = (View) inflater.inflate(
+        view = inflater.inflate(
                 R.layout.charts, container, false);
         prepareDatePickers();
         prepareChart();
@@ -69,9 +71,9 @@ public class ChartsFragment extends Fragment {
         final TextView maxDateText = (TextView) view.findViewById(R.id.datefield2);
 
         // Set default dates (1 year)
-        minDate = Calendar.getInstance();
-        minDate.add(Calendar.DAY_OF_YEAR, -365);
-        maxDate = Calendar.getInstance();
+        minDate = getInstance();
+        minDate.add(DAY_OF_YEAR, -365);
+        maxDate = getInstance();
         final SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
         sdf.setTimeZone(minDate.getTimeZone());
         minDateText.setText(sdf.format(minDate.getTime()));
@@ -89,7 +91,7 @@ public class ChartsFragment extends Fragment {
                         }
                         minDateText.setText(sdf.format(minDate.getTime()));
                     }
-                }, minDate.get(Calendar.YEAR), minDate.get(Calendar.MONTH), minDate.get(Calendar.DAY_OF_MONTH));
+                }, minDate.get(YEAR), minDate.get(MONTH), minDate.get(DAY_OF_MONTH));
         minDateText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -108,7 +110,7 @@ public class ChartsFragment extends Fragment {
                         }
                         maxDateText.setText(sdf.format(maxDate.getTime()));
                     }
-                }, maxDate.get(Calendar.YEAR), maxDate.get(Calendar.MONTH), maxDate.get(Calendar.DAY_OF_MONTH));
+                }, maxDate.get(YEAR), maxDate.get(MONTH), maxDate.get(DAY_OF_MONTH));
         maxDateText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -152,7 +154,7 @@ public class ChartsFragment extends Fragment {
         l.setXEntrySpace(4f);
         // Initialize chart without data
         ArrayList<BarEntry> entries = new ArrayList<>();
-        BarDataSet dataset = new BarDataSet(entries, "" + maxDate.get(Calendar.YEAR));
+        BarDataSet dataset = new BarDataSet(entries, "" + maxDate.get(YEAR));
         ArrayList<String> labels = new ArrayList<>();
         BarData data = new BarData(labels, dataset);
         chart1.setData(data);
@@ -185,22 +187,22 @@ public class ChartsFragment extends Fragment {
             List<String> labels = new ArrayList<>();
             // First item
             Date date = shoppingLists.get(0).getDate();
-            Calendar cal = Calendar.getInstance();
+            Calendar cal = getInstance();
             cal.setTime(date);
-            int year = cal.get(Calendar.YEAR);
-            int month = cal.get(Calendar.MONTH);
+            int year = cal.get(YEAR);
+            int month = cal.get(MONTH);
             entrysYear.put(year + "", new ArrayList<BarEntry>());
             labels.add(mMonths[month % 12]);
 
             long totalPrice = 0;
-            int newYear = 0;
-            int newMonth = 0;
+            int newYear;
+            int newMonth;
             for (int i = 0; i < shoppingLists.size(); i++) {
                 Date d = shoppingLists.get(i).getDate();
-                Calendar c = Calendar.getInstance();
+                Calendar c = getInstance();
                 c.setTime(d);
-                newYear = c.get(Calendar.YEAR);
-                newMonth = c.get(Calendar.MONTH);
+                newYear = c.get(YEAR);
+                newMonth = c.get(MONTH);
 
                 if (newMonth == month && newYear == year) {
                     totalPrice += shoppingLists.get(i).getTotalPrice();
