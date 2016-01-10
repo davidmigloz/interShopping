@@ -9,6 +9,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -42,11 +43,28 @@ public class SupermarketListFragment extends Fragment {
     private void setupRecyclerView(RecyclerView recyclerView) {
         // Get Supermarkets
         List<Supermarket> supermarkets = Supermarket.listAll(Supermarket.class);
-
         // LinearLayoutManager provides a similar implementation to a ListView
         recyclerView.setLayoutManager(new LinearLayoutManager(recyclerView.getContext()));
-        recyclerView.setAdapter(new SupermarketRecyclerViewAdapter(getActivity(),
-                supermarkets));
+        final SupermarketRecyclerViewAdapter adapter = new SupermarketRecyclerViewAdapter(
+                getActivity(), supermarkets);
+        recyclerView.setAdapter(adapter);
+        // For swipe and drag
+        ItemTouchHelper mIth = new ItemTouchHelper(
+                new ItemTouchHelper.SimpleCallback(ItemTouchHelper.UP | ItemTouchHelper.DOWN,
+                        ItemTouchHelper.LEFT) {
+                    @Override
+                    public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder,
+                                          RecyclerView.ViewHolder target) {
+                        adapter.onItemMove(viewHolder.getAdapterPosition(), target.getAdapterPosition());
+                        return true;
+                    }
+
+                    @Override
+                    public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
+                        adapter.onItemDismiss(viewHolder.getAdapterPosition());
+                    }
+                });
+        mIth.attachToRecyclerView(recyclerView);
     }
 
     @Override
@@ -67,7 +85,7 @@ public class SupermarketListFragment extends Fragment {
             return;
         }
         // If it's visible, set the right action to the FloatingActionButton and show it
-        InterShoppingActivity mainActivity = (InterShoppingActivity)getActivity();
+        InterShoppingActivity mainActivity = (InterShoppingActivity) getActivity();
         mainActivity.fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -94,7 +112,7 @@ public class SupermarketListFragment extends Fragment {
          */
         @Override
         public int getItemCount() {
-            return supermarkets.size();
+            return supermarkets == null ? 0 : supermarkets.size();
         }
 
         /**
@@ -117,7 +135,6 @@ public class SupermarketListFragment extends Fragment {
             viewHolder.icon.setImageDrawable(icon);
             // Supermarket name
             viewHolder.item_name.setText(supermarkets.get(position).toString());
-
             // Listener
             viewHolder.mView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -126,6 +143,24 @@ public class SupermarketListFragment extends Fragment {
                             "SupermarketEntity Pressed", Toast.LENGTH_SHORT).show();
                 }
             });
+        }
+
+        /**
+         * When a supermarket is removed, delete it from database.
+         */
+        public void onItemDismiss(int position) {
+            supermarkets.get(position).delete();
+            supermarkets.remove(position);
+            notifyItemRemoved(position);
+        }
+
+        /**
+         * When a supermarket is moved, save position.
+         */
+        public void onItemMove(int fromPosition, int toPosition) {
+            Supermarket prev = supermarkets.remove(fromPosition);
+            supermarkets.add(toPosition > fromPosition ? toPosition - 1 : toPosition, prev);
+            notifyItemMoved(fromPosition, toPosition);
         }
 
         public static class ViewHolder extends RecyclerView.ViewHolder {
