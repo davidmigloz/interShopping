@@ -13,7 +13,7 @@ import java.util.List;
 public class ShoppingList extends SugarRecord implements Serializable, Comparable<ShoppingList> {
     private Date date;
     private Supermarket supermarket;
-    private long totalPrice;
+    private float totalPrice;
     private int numItems;
     private int numItemsBought;
 
@@ -23,7 +23,7 @@ public class ShoppingList extends SugarRecord implements Serializable, Comparabl
     public ShoppingList(Date date, Supermarket supermarket) {
         this.date = date;
         this.supermarket = supermarket;
-        totalPrice = 0L;
+        totalPrice = 0;
         numItems = 0;
         numItemsBought = 0;
     }
@@ -32,7 +32,7 @@ public class ShoppingList extends SugarRecord implements Serializable, Comparabl
         return supermarket;
     }
 
-    public long getTotalPrice() {
+    public float getTotalPrice() {
         return totalPrice;
     }
 
@@ -54,7 +54,7 @@ public class ShoppingList extends SugarRecord implements Serializable, Comparabl
                 "shopping_list = ?", this.getId().toString());
         numItems = 0;
         numItemsBought = 0;
-        totalPrice = 0L;
+        totalPrice = 0;
         for(ListItem item : listItems){
             numItems++;
             if(item.isPurchased()){

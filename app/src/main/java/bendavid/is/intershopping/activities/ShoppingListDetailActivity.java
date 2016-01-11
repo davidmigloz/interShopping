@@ -27,6 +27,8 @@ import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -135,7 +137,8 @@ public class ShoppingListDetailActivity extends AppCompatActivity {
         boughtItems.setText(this.getString(R.string.num_bought_total,
                 shoppingList.getNumItemsBought(), shoppingList.getNumItems()));
         // Total price
-        totalPrice.setText(this.getString(R.string.price_eur, shoppingList.getTotalPrice()));
+        NumberFormat nf = new DecimalFormat("#,###.##€");
+        totalPrice.setText(nf.format(shoppingList.getTotalPrice()));
     }
 
     /**
@@ -297,7 +300,7 @@ public class ShoppingListDetailActivity extends AppCompatActivity {
                     ok.setOnClickListener(new View.OnClickListener() {
                         public void onClick(View v) {
                             // Get data
-                            int pri = Integer.parseInt(String.valueOf(price.getText()));
+                            float pri = Float.parseFloat(String.valueOf(price.getText()));
                             ListItem.PriceType typ = (ListItem.PriceType) priceType.getSelectedItem();
                             int qua = Integer.parseInt(String.valueOf(quantity.getText()));
                             // Save it
@@ -336,11 +339,13 @@ public class ShoppingListDetailActivity extends AppCompatActivity {
 
         private void updateSLInfo() {
             sl.updateItemsInfo();
+            sl.save();
             // Number of items bought
             boughtItems.setText(context.getString(R.string.num_bought_total,
                     sl.getNumItemsBought(), sl.getNumItems()));
             // Total price
-            totalPrice.setText(context.getString(R.string.price_eur, sl.getTotalPrice()));
+            NumberFormat nf = new DecimalFormat("#,###.##€");
+            totalPrice.setText(nf.format(sl.getTotalPrice()));
         }
 
         /**

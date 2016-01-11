@@ -9,7 +9,7 @@ import com.orm.SugarRecord;
 public class ListItem extends SugarRecord {
     private String name;
     private String translation;
-    private long price;
+    private float price;
     private PriceType priceType;
     private long quantity;
     private ShoppingList shoppingList;
@@ -42,11 +42,19 @@ public class ListItem extends SugarRecord {
             return "-";
     }
 
-    public long getTotalPrice(){
+    public float getPrice() {
+        return price;
+    }
+
+    public float getTotalPrice(){
         return price * quantity;
     }
     public PriceType getPriceType() {
         return priceType;
+    }
+
+    public ShoppingList getShoppingList() {
+        return shoppingList;
     }
 
     public boolean isPurchased() {
@@ -57,7 +65,7 @@ public class ListItem extends SugarRecord {
         this.purchased = purchased;
     }
 
-    public void buy(long price, PriceType priceType, long quantity){
+    public void buy(float price, PriceType priceType, long quantity){
         this.price = price;
         this.priceType = priceType;
         this.quantity = quantity;

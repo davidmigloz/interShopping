@@ -17,6 +17,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.Collections;
 import java.util.List;
 
@@ -144,7 +146,8 @@ public class ShoppingListFragment extends Fragment {
             viewHolder.boughtItems.setText(shoppingLists.get(position).getNumItemsBought() +
                     "/" + shoppingLists.get(position).getNumItems());
             // Total price
-            viewHolder.totalPrice.setText(shoppingLists.get(position).getTotalPrice() + "€");
+            NumberFormat nf = new DecimalFormat("#,###.##€");
+            viewHolder.totalPrice.setText(nf.format(shoppingLists.get(position).getTotalPrice()));
             // Listener: go to shopping list when item is pressed
             viewHolder.cv.setOnClickListener(new View.OnClickListener() {
                 /**

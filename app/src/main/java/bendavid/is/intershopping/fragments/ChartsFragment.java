@@ -194,7 +194,7 @@ public class ChartsFragment extends Fragment {
             entrysYear.put(year + "", new ArrayList<BarEntry>());
             labels.add(mMonths[month % 12]);
 
-            long totalPrice = 0;
+            float totalPrice = 0;
             int newYear;
             int newMonth;
             for (int i = 0; i < shoppingLists.size(); i++) {
@@ -252,12 +252,12 @@ public class ChartsFragment extends Fragment {
         private DecimalFormat mFormat;
 
         public MyYAxisValueFormatter() {
-            mFormat = new DecimalFormat("###,###,###,##0.0");
+            mFormat = new DecimalFormat("###,###,###,##0.0€");
         }
 
         @Override
         public String getFormattedValue(float value, YAxis yAxis) {
-            return mFormat.format(value) + " €";
+            return mFormat.format(value);
         }
     }
 }

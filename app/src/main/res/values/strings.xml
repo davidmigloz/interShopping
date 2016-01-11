@@ -20,11 +20,13 @@
     <string name="skip">Skip</string>
     <string name="ok">Ok</string>
     <string name="enter_price">Enter price</string>
-    <string name="price_eur">%1$d€</string>
+    <string name="price_eur">%1$.2f€</string>
     <string name="num_bought_total">%1$d/%2$d</string>
     <string name="name_translation">%1$s / %2$s</string>
     <string name="quantity">Quantity</string>
     <string name="unit">unit</string>
     <string name="uno">1</string>
+    <string name="product">Product:</string>
+    <string name="no_results">No results...</string>
 
 </resources>

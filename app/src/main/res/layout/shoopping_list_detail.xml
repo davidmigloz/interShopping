@@ -83,7 +83,7 @@
                         android:layout_width="100dp"
                         android:layout_height="wrap_content"
                         android:layout_below="@id/label1"
-                        android:inputType="number"
+                        android:inputType="numberDecimal"
                         android:maxWidth="100dp"
                         android:singleLine="true" />
 
