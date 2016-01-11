@@ -225,9 +225,6 @@ public class ChartsFragment extends Fragment {
             BarEntry be = new BarEntry(totalPrice, labels.size() - 1);
             entrysYear.get(year + "").add(be);
 
-            Toast.makeText(getActivity(),
-                    entrysYear + " shopping lists", Toast.LENGTH_SHORT).show();
-
             BarData data = new BarData(labels);
             int i = 0;
             for (String name : entrysYear.keySet()) {

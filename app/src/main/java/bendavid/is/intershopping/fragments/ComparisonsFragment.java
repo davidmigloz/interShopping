@@ -12,15 +12,30 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.github.mikephil.charting.charts.BarChart;
+import com.github.mikephil.charting.components.Legend;
+import com.github.mikephil.charting.components.XAxis;
+import com.github.mikephil.charting.components.YAxis;
+import com.github.mikephil.charting.data.BarData;
+import com.github.mikephil.charting.data.BarDataSet;
+import com.github.mikephil.charting.data.BarEntry;
+import com.github.mikephil.charting.formatter.YAxisValueFormatter;
+import com.github.mikephil.charting.utils.ColorTemplate;
 import com.orm.query.Condition;
 import com.orm.query.Select;
 
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import bendavid.is.intershopping.R;
 import bendavid.is.intershopping.entities.ListItem;
+import bendavid.is.intershopping.entities.Supermarket;
+
+import static java.util.Calendar.YEAR;
 
 public class ComparisonsFragment extends Fragment {
     private View view;
@@ -29,6 +44,8 @@ public class ComparisonsFragment extends Fragment {
     private TextView supermarketText;
     private TextView dateText;
     private TextView priceText;
+    private CardView chartCard;
+    private BarChart chart;
 
     @Nullable
     @Override
@@ -43,6 +60,8 @@ public class ComparisonsFragment extends Fragment {
         supermarketText = (TextView) view.findViewById(R.id.supermarket_name);
         dateText = (TextView) view.findViewById(R.id.date);
         priceText = (TextView) view.findViewById(R.id.total_price);
+        chartCard = (CardView) view.findViewById(R.id.chart_card);
+        chart = (BarChart) view.findViewById(R.id.chart);
 
         searchButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -70,19 +89,97 @@ public class ComparisonsFragment extends Fragment {
             priceText.setText(nf.format(lowest.getPrice()));
             noResults.setVisibility(View.GONE);
             card.setVisibility(View.VISIBLE);
-            drawChart(result);
+            drawChart(result, product);
         } else {
             supermarketText.setText("No results");
             dateText.setText("");
             priceText.setText("");
             card.setVisibility(View.GONE);
+            chartCard.setVisibility(View.GONE);
             noResults.setVisibility(View.VISIBLE);
         }
     }
 
-    private void drawChart(List<ListItem> result) {
-
+    private void drawChart(List<ListItem> result, String product) {
+        Map<String, Float> supermarketsAveragePrice = new HashMap<>();
+        Map<String, Integer> supermarketNumItems = new HashMap<>();
+        for(ListItem li : result){
+            String sm = li.getShoppingList().getSupermarked().toString();
+            Float price = li.getPrice();
+            if(supermarketsAveragePrice.containsKey(sm)){
+                Float sum = supermarketsAveragePrice.get(sm) + price;
+                supermarketsAveragePrice.put(sm, sum);
+                Integer numItems = supermarketNumItems.get(sm) + 1;
+                supermarketNumItems.put(sm, numItems);
+            } else {
+                supermarketsAveragePrice.put(sm, price);
+                supermarketNumItems.put(sm, 1);
+            }
+        }
+        // Calculate average
+        for(String sm : supermarketsAveragePrice.keySet()){
+            Float avg = supermarketsAveragePrice.get(sm) / supermarketNumItems.get(sm);
+            supermarketsAveragePrice.put(sm, avg);
+        }
+        // Draw data
+        prepareChart();
+        ArrayList<BarEntry> entries = new ArrayList<>();
+        ArrayList<String> labels = new ArrayList<String>();
+        int i = 0;
+        for(String sm : supermarketsAveragePrice.keySet()){
+            entries.add(new BarEntry(supermarketsAveragePrice.get(sm), i++));
+            labels.add(sm);
+        }
+        BarDataSet dataset = new BarDataSet(entries, "Average price of " + product);
+        dataset.setColors(ColorTemplate.COLORFUL_COLORS);
+        BarData data = new BarData(labels, dataset);
+        chart.setData(data);
+        chartCard.setVisibility(View.VISIBLE);
     }
 
+    private void prepareChart() {
+        // Chart
+        chart.setMaxVisibleValueCount(10);
+        chart.setDrawGridBackground(false);
+        chart.setDescription("");
+        // X axis
+        XAxis xAxis = chart.getXAxis();
+        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
+        xAxis.setDrawGridLines(false);
+        // Y axis
+        YAxisValueFormatter custom = new MyYAxisValueFormatter();
+        YAxis leftAxis = chart.getAxisLeft();
+        leftAxis.setLabelCount(8, false);
+        leftAxis.setValueFormatter(custom);
+        leftAxis.setPosition(YAxis.YAxisLabelPosition.OUTSIDE_CHART);
+        leftAxis.setSpaceTop(15f);
+        YAxis rightAxis = chart.getAxisRight();
+        rightAxis.setDrawGridLines(false);
+        rightAxis.setLabelCount(8, false);
+        rightAxis.setValueFormatter(custom);
+        rightAxis.setSpaceTop(15f);
+        // Legend
+        Legend l = chart.getLegend();
+        l.setPosition(Legend.LegendPosition.BELOW_CHART_LEFT);
+        l.setForm(Legend.LegendForm.CIRCLE);
+        l.setFormSize(9f);
+        l.setTextSize(11f);
+        l.setXEntrySpace(4f);
+    }
 
+    /**
+     * Custom format for the Y axis.
+     */
+    private class MyYAxisValueFormatter implements YAxisValueFormatter {
+        private DecimalFormat mFormat;
+
+        public MyYAxisValueFormatter() {
+            mFormat = new DecimalFormat("###,###,###,##0.0€");
+        }
+
+        @Override
+        public String getFormattedValue(float value, YAxis yAxis) {
+            return mFormat.format(value);
+        }
+    }
 }
