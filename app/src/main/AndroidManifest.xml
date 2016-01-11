@@ -56,11 +56,11 @@
         <activity android:name=".activities.StatsActivity" />
         <activity android:name=".activities.SupermarketDetailActivity"></activity>
 
-        <meta-data
+        <!--<meta-data
             android:name="com.google.android.maps.v2.API_KEY"
             android:value="your_apikey" />
 
-        <uses-library android:name="com.google.android.maps" />
+        <uses-library android:name="com.google.android.maps" />-->
 
     </application>
 
