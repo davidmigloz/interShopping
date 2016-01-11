@@ -1,5 +1,6 @@
 package bendavid.is.intershopping.fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -32,15 +33,13 @@ import java.util.List;
 import java.util.Map;
 
 import bendavid.is.intershopping.R;
+import bendavid.is.intershopping.activities.SupermarketDetailActivity;
 import bendavid.is.intershopping.entities.ListItem;
-import bendavid.is.intershopping.entities.Supermarket;
-
-import static java.util.Calendar.YEAR;
 
 public class ComparisonsFragment extends Fragment {
-    private View view;
     private CardView card;
-    private RelativeLayout noResults;
+    private RelativeLayout help;
+    private TextView helpText;
     private TextView supermarketText;
     private TextView dateText;
     private TextView priceText;
@@ -50,12 +49,13 @@ public class ComparisonsFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        view = inflater.inflate(
+        View view = inflater.inflate(
                 R.layout.comparisons, container, false);
 
         ImageView searchButton = (ImageView) view.findViewById(R.id.search_icon);
         final EditText input = (EditText) view.findViewById(R.id.product_input);
-        noResults = (RelativeLayout) view.findViewById(R.id.no_results);
+        help = (RelativeLayout) view.findViewById(R.id.help);
+        helpText = (TextView) view.findViewById(R.id.help_text);
         card = (CardView) view.findViewById(R.id.result);
         supermarketText = (TextView) view.findViewById(R.id.supermarket_name);
         dateText = (TextView) view.findViewById(R.id.date);
@@ -82,21 +82,26 @@ public class ComparisonsFragment extends Fragment {
         List<ListItem> result = selectSLInRange.list();
 
         if (result.size() > 0) {
-            ListItem lowest = result.get(0);
+            final ListItem lowest = result.get(0);
             supermarketText.setText(lowest.getShoppingList().getSupermarked().toString());
             dateText.setText(lowest.getShoppingList().toString());
             NumberFormat nf = new DecimalFormat("#,###.##" + lowest.getPriceType().toString());
             priceText.setText(nf.format(lowest.getPrice()));
-            noResults.setVisibility(View.GONE);
+            help.setVisibility(View.GONE);
+            card.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    Intent i = new Intent(getContext(), SupermarketDetailActivity.class);
+                    i.putExtra("supermarket-id", lowest.getShoppingList().getSupermarked().getId());
+                    getContext().startActivity(i);
+                }
+            });
             card.setVisibility(View.VISIBLE);
             drawChart(result, product);
         } else {
-            supermarketText.setText("No results");
-            dateText.setText("");
-            priceText.setText("");
+            helpText.setText(R.string.no_results);
             card.setVisibility(View.GONE);
             chartCard.setVisibility(View.GONE);
-            noResults.setVisibility(View.VISIBLE);
+            help.setVisibility(View.VISIBLE);
         }
     }
 
@@ -124,7 +129,7 @@ public class ComparisonsFragment extends Fragment {
         // Draw data
         prepareChart();
         ArrayList<BarEntry> entries = new ArrayList<>();
-        ArrayList<String> labels = new ArrayList<String>();
+        ArrayList<String> labels = new ArrayList<>();
         int i = 0;
         for(String sm : supermarketsAveragePrice.keySet()){
             entries.add(new BarEntry(supermarketsAveragePrice.get(sm), i++));
@@ -139,6 +144,7 @@ public class ComparisonsFragment extends Fragment {
 
     private void prepareChart() {
         // Chart
+        chart.clear();
         chart.setMaxVisibleValueCount(10);
         chart.setDrawGridBackground(false);
         chart.setDescription("");

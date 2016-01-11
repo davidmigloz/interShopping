@@ -28,5 +28,10 @@
     <string name="uno">1</string>
     <string name="product">Product:</string>
     <string name="no_results">No results...</string>
-
+    <string name="search_icon">Search icon</string>
+    <string name="sc">Shopping cart</string>
+    <string name="desc_comparison">Find where you bought a product with the lowest price and compare the average prices of all the supermarkets.</string>
+    <string name="calendar">calendar</string>
+    <string name="address">Address</string>
+    <string name="notes">Notes</string>
 </resources>

@@ -2,20 +2,17 @@ package bendavid.is.intershopping.fragments;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.ContextCompat;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.List;
 
@@ -131,17 +128,17 @@ public class SupermarketListFragment extends Fragment {
          */
         @Override
         public void onBindViewHolder(final ViewHolder viewHolder, final int position) {
-            // Supermarket's icon
-            Drawable icon = ContextCompat.getDrawable(context, R.drawable.ic_calendar_24);
-            viewHolder.icon.setImageDrawable(icon);
+            // Supermarket letter
+            viewHolder.letter.setText(supermarkets.get(position).toString().substring(0,1).toUpperCase());
             // Supermarket name
-            viewHolder.item_name.setText(supermarkets.get(position).toString());
+            viewHolder.supermarketName.setText(supermarkets.get(position).toString());
+            // Location
+            viewHolder.location.setText(supermarkets.get(position).getAddress());
             // Listener
-            viewHolder.mView.setOnClickListener(new View.OnClickListener() {
+            viewHolder.card.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Supermarket sm = supermarkets.get(position);
-
                     Intent i = new Intent(context, SupermarketDetailActivity.class);
                     i.putExtra("supermarket-id", sm.getId());
                     context.startActivity(i);
@@ -168,15 +165,17 @@ public class SupermarketListFragment extends Fragment {
         }
 
         public static class ViewHolder extends RecyclerView.ViewHolder {
-            public final View mView;
-            public ImageView icon;
-            public TextView item_name;
+            private CardView card;
+            public TextView letter;
+            public TextView supermarketName;
+            public TextView location;
 
             public ViewHolder(View view) {
                 super(view);
-                mView = view;
-                icon = (ImageView) view.findViewById(R.id.letter_sm);
-                item_name = (TextView) view.findViewById(R.id.item_name);
+                card = (CardView) view.findViewById(R.id.cv);
+                letter = (TextView) view.findViewById(R.id.letter_sm);
+                supermarketName = (TextView) view.findViewById(R.id.supermarket_name);
+                location = (TextView) view.findViewById(R.id.location);
             }
         }
     }

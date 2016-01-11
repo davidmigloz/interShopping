@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v4.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v4.widget.DrawerLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fitsSystemWindows="true">
+    android:fitsSystemWindows="true"
+    >
 
-    <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
+    <android.support.design.widget.CoordinatorLayout
         android:id="@+id/main_content"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -19,70 +20,77 @@
             android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
 
             <!-- ActionBar -->
-            <include layout="@layout/action_bar" />
+            <include layout="@layout/action_bar"/>
 
         </android.support.design.widget.AppBarLayout>
 
         <!-- Body  -->
-        <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginTop="45dp"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"
             android:padding="15dp">
 
-            <!--<View-->
-                <!--android:id="@+id/separator1"-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="1dp"-->
-                <!--android:layout_marginBottom="10dp"-->
-                <!--android:layout_marginTop="10dp"-->
-                <!--android:background="@android:color/darker_gray" />-->
+            <ImageView
+                android:id="@+id/crl_supermarket_icon"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="10dp"
+                android:contentDescription="@string/supermarkets"
+                android:src="@drawable/ic_shopping_cart_24"/>
 
             <EditText
                 android:id="@+id/newname"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_alignParentStart="true"
-                android:hint="@string/new_sm_name" />
-
-            <View
-                android:id="@+id/separator2"
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_below="@id/newname"
                 android:layout_marginBottom="10dp"
+                android:layout_toRightOf="@id/crl_supermarket_icon"
+                android:hint="@string/new_sm_name"
+                android:singleLine="true"/>
+
+            <ImageView
+                android:id="@+id/add_im"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_below="@+id/newname"
+                android:layout_marginRight="10dp"
                 android:layout_marginTop="10dp"
-                android:background="@android:color/darker_gray" />
+                android:contentDescription="@string/address"
+                android:src="@drawable/ic_action_home"/>
 
             <EditText
                 android:id="@+id/newaddress"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_alignParentStart="true"
-                android:layout_below="@id/separator2"
-                android:hint="@string/new_sm_address" />
-
-            <View
-                android:id="@+id/separator3"
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_below="@id/newaddress"
+                android:layout_below="@+id/newname"
                 android:layout_marginBottom="10dp"
+                android:layout_toRightOf="@+id/add_im"
+                android:hint="@string/new_sm_address"
+                android:singleLine="true"/>
+
+            <ImageView
+                android:id="@+id/notes_im"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_below="@+id/newaddress"
+                android:layout_marginRight="10dp"
                 android:layout_marginTop="10dp"
-                android:background="@android:color/darker_gray" />
+                android:contentDescription="@string/notes"
+                android:src="@drawable/ic_action_info"/>
 
             <EditText
                 android:id="@+id/newnote"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_alignParentStart="true"
-                android:layout_below="@id/separator3"
-                android:hint="@string/new_sm_note" />
+                android:layout_below="@+id/newaddress"
+                android:layout_toRightOf="@+id/notes_im"
+                android:hint="@string/new_sm_note"/>
         </RelativeLayout>
 
     </android.support.design.widget.CoordinatorLayout>
 
     <!-- Navigation drawer (menu) that comes from the left -->
-    <include layout="@layout/left_menu" />
+    <include layout="@layout/left_menu"/>
 
 </android.support.v4.widget.DrawerLayout>

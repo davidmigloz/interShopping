@@ -1,25 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
+<!-- Supermarket list item of the recycler-view -->
+<android.support.v7.widget.CardView
+    android:id="@+id/cv"
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="15dp">
+    android:layout_marginBottom="10dp">
 
-    <ImageView
-        android:id="@+id/letter_sm"
-        android:layout_width="wrap_content"
+    <RelativeLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_centerVertical="true"
-        android:layout_marginRight="10dp"/>
+        android:padding="16dp">
 
-    <TextView
-        android:id="@+id/item_name"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_toRightOf="@+id/letter_sm"
-        android:layout_centerVertical="true"
-        android:textAppearance="?attr/textAppearanceListItem"/>
+        <TextView
+            android:id="@+id/letter_sm"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginRight="16dp"
+            android:textColor="@color/primary_text"
+            android:textSize="40sp"/>
 
-</RelativeLayout>
+        <TextView
+            android:id="@+id/supermarket_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_marginTop="3dp"
+            android:layout_toRightOf="@+id/letter_sm"
+            android:textColor="@color/primary_text"
+            android:textSize="20sp"/>
+
+        <TextView
+            android:id="@+id/location"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/supermarket_name"
+            android:layout_toRightOf="@+id/letter_sm"
+            android:textColor="@color/secondary_text"/>
+    </RelativeLayout>
+
+</android.support.v7.widget.CardView>

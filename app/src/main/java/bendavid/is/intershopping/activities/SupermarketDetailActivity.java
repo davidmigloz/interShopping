@@ -11,7 +11,6 @@ import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
@@ -20,10 +19,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import bendavid.is.intershopping.R;
-import bendavid.is.intershopping.entities.ShoppingList;
 import bendavid.is.intershopping.entities.Supermarket;
 import bendavid.is.intershopping.fragments.SupermarketInfoFragment;
-import bendavid.is.intershopping.fragments.SupermarketPProductsFragment;
+import bendavid.is.intershopping.fragments.SupermarketProductsFragment;
 
 public class SupermarketDetailActivity extends AppCompatActivity {
     private DrawerLayout mDrawerLayout;
@@ -82,9 +80,7 @@ public class SupermarketDetailActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                Intent intent = new Intent(this, InterShoppingActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(intent);
+                onBackPressed();
                 break;
             default:
                 break;
@@ -102,7 +98,7 @@ public class SupermarketDetailActivity extends AppCompatActivity {
 //        adapter.addFragment(new SupermarketInfoFragment(), "Info");
         Bundle args = new Bundle();
         args.putLong("supermarket-id", (long) getIntent().getExtras().getSerializable("supermarket-id"));
-        SupermarketPProductsFragment smppf = new SupermarketPProductsFragment();
+        SupermarketProductsFragment smppf = new SupermarketProductsFragment();
         SupermarketInfoFragment smif = new SupermarketInfoFragment();
         smif.setArguments(args);
         smppf.setArguments(args);
@@ -110,7 +106,7 @@ public class SupermarketDetailActivity extends AppCompatActivity {
         Log.d("supermarket-id from", String.valueOf(sid));
 
         adapter.addFragment(smif, "Info");
-        adapter.addFragment(smppf, "Shopping List");
+        adapter.addFragment(smppf, "Shopping Lists");
         viewPager.setAdapter(adapter);
     }
 

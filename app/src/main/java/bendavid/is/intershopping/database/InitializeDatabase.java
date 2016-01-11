@@ -4,12 +4,10 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 
 import bendavid.is.intershopping.entities.AppConfig;
-import bendavid.is.intershopping.entities.Languages;
 import bendavid.is.intershopping.entities.ListItem;
 import bendavid.is.intershopping.entities.ShoppingList;
 import bendavid.is.intershopping.entities.Supermarket;
@@ -38,21 +36,27 @@ public final class InitializeDatabase {
 
     public static void insertData(int numSL) {
         Random random = new Random();
-        String[] supermarketsNames = {"Auchan", "Biedronka", "Carrefour market", "Carrefor express"};
+        String[] supermarketsNames = {"Auchan", "Biedronka", "Carrefour", "Żabka"};
+        String[] locations = {"Górczewska 124", "Grzybowska 12/14", "Puławska 39",  "Kobielska 6"};
+        String[] notes = {"Tel +48 22 334 86 44", "Tel +48 22 205 33 00",
+                "Tel +48 22 584 90 50", "Tel +48 61 856 37 00"};
+
         String[] itemsNames = {"Ketchup", "Potatoes", "Garlic", "Bread", "Pizza", "Pasta",
                 "Milk", "Turkey"};
+        String[] translations = {"Ketchup", "Ziemniaki", "Czosnek", "Chleb", "Pizza", "Makaron",
+                        "Mleko", "Turcja"};
 
         List<Supermarket> supermarketsList = new ArrayList<>();
         List<ShoppingList> shoppingLists = new ArrayList<>();
         List<Date> dates = new ArrayList<>();
 
-//         Create Config
-        AppConfig c = new AppConfig("English",true);
+        // Create Config
+        AppConfig c = new AppConfig("Polish",true);
         c.save();
 
         // Create supermarkets
-        for (String name : supermarketsNames) {
-            Supermarket s = new Supermarket(name);
+        for (int i = 0; i < supermarketsNames.length; i++) {
+            Supermarket s = new Supermarket(supermarketsNames[i], locations[i], notes[i]);
             s.save();
             supermarketsList.add(s);
         }
@@ -84,17 +88,19 @@ public final class InitializeDatabase {
 
         // Add items to the shopping lists
         for (ShoppingList sl : shoppingLists) {
-            int nItems = random.nextInt(5);
+            int nItems = randInt(3,6);
             // Items purchased
             for (int i = 0; i < nItems; i++) {
-                ListItem it = new ListItem(itemsNames[random.nextInt(itemsNames.length)], sl);
-                it.buy(randInt(1, 10), ListItem.PriceType.MONEY_UNIT, randInt(1, 10));
+                int r = random.nextInt(itemsNames.length);
+                ListItem it = new ListItem(itemsNames[r], translations[r], sl);
+                it.buy(randInt(1, 10), ListItem.PriceType.MONEY_UNIT, randInt(1, 5));
                 it.save();
             }
             // Items to purchase
-            nItems = random.nextInt(10);
+            nItems = randInt(3,6);
             for (int i = 0; i < nItems; i++) {
-                ListItem it = new ListItem(itemsNames[random.nextInt(itemsNames.length)], sl);
+                int r = random.nextInt(itemsNames.length);
+                ListItem it = new ListItem(itemsNames[r], translations[r], sl);
                 it.save();
             }
             sl.updateItemsInfo();

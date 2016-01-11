@@ -183,7 +183,6 @@ public class CreateSListActivity extends AppCompatActivity {
                 if (networkInfo != null && networkInfo.isConnected()) {
 
                     //we are connected to a network
-
                     class backgroundTranslation extends AsyncTask<Void, Void, Void> {
                         @Override
                         protected Void doInBackground(Void... params) {
@@ -209,6 +208,7 @@ public class CreateSListActivity extends AppCompatActivity {
                             Toast.makeText(getApplicationContext(),
                                     "...New Shopping List saved.", Toast.LENGTH_SHORT).show();
                             Intent intent = new Intent(CreateSListActivity.this, InterShoppingActivity.class);
+                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                             startActivity(intent);
                             super.onPostExecute(result);
                         }
@@ -225,8 +225,6 @@ public class CreateSListActivity extends AppCompatActivity {
             } else {
                 Toast.makeText(getApplicationContext(),
                         "Fill the inputs", Toast.LENGTH_SHORT).show();
-
-
             }
         }
     }
@@ -249,9 +247,7 @@ public class CreateSListActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                Intent intent = new Intent(this, InterShoppingActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(intent);
+                onBackPressed();
                 break;
             case R.id.action_menu_done:
                 addSList();
@@ -264,7 +260,6 @@ public class CreateSListActivity extends AppCompatActivity {
     /**
      * Setup left menu.
      */
-
     private void setupDrawerContent(NavigationView navigationView) {
         navigationView.setNavigationItemSelectedListener(
                 new NavigationView.OnNavigationItemSelectedListener() {
@@ -283,7 +278,6 @@ public class CreateSListActivity extends AppCompatActivity {
         text = URLEncoder.encode(text, "utf-8");
         Languages language = new Languages(AppConfig.first(AppConfig.class).getLanguage());
         String lang = language.getCode();
-//        URL url = new URL("http://api.mymemory.translated.net/get?q=" + text + "!&langpair=Autodetect|de");
         URL url = new URL("https://translate.yandex.net/api/v1.5/tr.json/translate?" +
                 "key=" + "trnsl.1.1.20160107T140340Z.3a9a6b4696483460.12c87164fd285e07c39ff4fde63b5c98feef6dd4" +
                 "&text=" + text +
@@ -294,7 +288,7 @@ public class CreateSListActivity extends AppCompatActivity {
             StringBuilder sb = new StringBuilder();
             BufferedReader reader = new BufferedReader(new InputStreamReader(in));
 
-            String nextLine = "";
+            String nextLine;
             while ((nextLine = reader.readLine()) != null) {
                 sb.append(nextLine);
             }
@@ -304,19 +298,12 @@ public class CreateSListActivity extends AppCompatActivity {
             try {
                 jobj = new JSONObject(json);
                 int code = Integer.parseInt(jobj.getString("code")); // yandex
-//                int code = Integer.parseInt(jobj.getString("responseStatus")); // mymemory
                 if (code == 200 || code == 201) {
                     translatedText = jobj.getString("text");// yandex
                     translatedText = translatedText.substring(2, translatedText.length() - 2);
                     Log.d(translatedText, translatedText);
-//                    JSONObject jobj2 = new JSONObject(jobj.getString("responseData")); // mymemory
-//                    translatedText = jobj2.getString("translatedText");
-//                    Log.d(translatedText, translatedText);
                 } else saveWithoutTranslation();
-            } catch (NumberFormatException e) {
-                e.printStackTrace();
-                saveWithoutTranslation();
-            } catch (JSONException e) {
+            } catch (NumberFormatException | JSONException e) {
                 e.printStackTrace();
                 saveWithoutTranslation();
             }

@@ -32,27 +32,29 @@ import bendavid.is.intershopping.entities.ShoppingList;
  * Show a list with all the shopping lists stored in the data base.
  */
 public class ShoppingListFragment extends Fragment {
+    private RecyclerView rv;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        RecyclerView rv = (RecyclerView) inflater.inflate(
+        rv = (RecyclerView) inflater.inflate(
                 R.layout.list_shopping_lists, container, false);
-        setupRecyclerView(rv);
+        setupRecyclerView();
         return rv;
     }
 
     /**
      * Get all the shopping lists and show them in the RecyclerView.
      */
-    private void setupRecyclerView(RecyclerView recyclerView) {
+    private void setupRecyclerView() {
         // Get Shopping lists
         List<ShoppingList> shoppingLists = ShoppingList.listAll(ShoppingList.class);
         Collections.sort(shoppingLists, Collections.reverseOrder());
         // LinearLayoutManager provides a similar implementation to a ListView
-        recyclerView.setLayoutManager(new LinearLayoutManager(recyclerView.getContext()));
+        rv.setLayoutManager(new LinearLayoutManager(rv.getContext()));
         final ShoppingListRecyclerViewAdapter adapter = new ShoppingListRecyclerViewAdapter(
                 getActivity(), shoppingLists);
-        recyclerView.setAdapter(adapter);
+        rv.setAdapter(adapter);
         // For swipe and drag
         ItemTouchHelper mIth = new ItemTouchHelper(
                 new ItemTouchHelper.SimpleCallback(ItemTouchHelper.UP | ItemTouchHelper.DOWN,
@@ -69,7 +71,7 @@ public class ShoppingListFragment extends Fragment {
                         adapter.onItemDismiss(viewHolder.getAdapterPosition());
                     }
                 });
-        mIth.attachToRecyclerView(recyclerView);
+        mIth.attachToRecyclerView(rv);
     }
 
     @Override
@@ -100,6 +102,7 @@ public class ShoppingListFragment extends Fragment {
             }
         });
         mainActivity.fab.show();
+        setupRecyclerView();
     }
 
     public static class ShoppingListRecyclerViewAdapter

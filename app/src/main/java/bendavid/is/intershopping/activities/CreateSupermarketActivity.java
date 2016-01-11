@@ -66,6 +66,7 @@ public class CreateSupermarketActivity extends AppCompatActivity {
             Toast.makeText(getApplicationContext(),
                     "New Supermarket saved.", Toast.LENGTH_SHORT).show();
             Intent intent = new Intent(CreateSupermarketActivity.this, InterShoppingActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(intent);
         } else {
             Toast.makeText(getApplicationContext(),
@@ -73,8 +74,9 @@ public class CreateSupermarketActivity extends AppCompatActivity {
         }
     }
 
-    // is empty method checks if edittext is empty and promts with setError
-
+    /**
+     * is empty method checks if edittext is empty and promts with setError
+     */
     private boolean isNotEmpty(EditText etText) {
         if (etText.getText().toString().trim().length() == 0) {
             etText.setError("This field cannot be empty!");
@@ -111,9 +113,7 @@ public class CreateSupermarketActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                Intent intent = new Intent(this, InterShoppingActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(intent);
+                onBackPressed();
                 break;
             case R.id.action_menu_done:
                 addSupermarket();

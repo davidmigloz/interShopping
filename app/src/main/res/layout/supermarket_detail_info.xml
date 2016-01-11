@@ -1,78 +1,62 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v4.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/drawer_layout"
+<!-- Supermarket info  -->
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fitsSystemWindows="true">
+    android:padding="15dp">
 
+    <!--<com.google.android.maps.MapView
+        android:id="@+id/mapview"
+        android:layout_width="fill_parent"
+        android:layout_height="0dp"
+        android:layout_weight=".3"
+        android:apiKey="MapsAPIKey"
+        android:clickable="true" />-->
 
-    <!-- Body  -->
-    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <ImageView
+        android:id="@+id/add_im"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:contentDescription="@string/address"
+        android:layout_marginRight="10dp"
+        android:src="@drawable/ic_action_home"/>
+
+    <TextView
+        android:id="@+id/address"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/add_im"
+        android:textSize="17sp"/>
+
+    <View
+        android:id="@+id/separator1"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-        <!--android:layout_marginTop="45dp"-->
-        <!--android:padding="15dp">-->
+        android:layout_height="1dp"
+        android:layout_below="@+id/address"
+        android:layout_marginBottom="10dp"
+        android:layout_marginTop="10dp"
+        android:background="@android:color/darker_gray"/>
 
-        <!--<com.google.android.maps.MapView
-            android:id="@+id/mapview"
-            android:layout_width="fill_parent"
-            android:layout_height="0dp"
-            android:layout_weight=".3"
-            android:apiKey="MapsAPIKey"
-            android:clickable="true" />-->
-        <ImageView
-            android:id="@+id/add_im"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:src="@drawable/ic_action_home" />
+    <ImageView
+        android:id="@+id/notes_im"
+        android:layout_width="24dp"
+        android:contentDescription="@string/notes"
+        android:layout_height="24dp"
+        android:layout_below="@+id/separator1"
+        android:layout_marginRight="10dp"
+        android:src="@drawable/ic_action_info"/>
+
+    <ScrollView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/separator1"
+        android:layout_toRightOf="@id/notes_im">
 
         <TextView
-            android:id="@+id/address"
+            android:id="@+id/notes"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_above="@+id/separator1"
-            android:layout_alignParentEnd="true"
-            android:layout_toRightOf="@id/add_im"
-            android:text="asdf"
-            android:textAppearance="?android:attr/textAppearanceLarge" />
-
-        <View
-            android:id="@+id/separator1"
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_below="@+id/add_im"
-            android:layout_marginBottom="10dp"
-            android:layout_marginTop="10dp"
-            android:background="@android:color/darker_gray" />
-
-        <ImageView
-            android:id="@+id/notes_im"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/separator1"
-            android:layout_marginTop="10dp"
-            android:src="@drawable/ic_action_info" />
-
-        <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/separator1"
-            android:layout_toRightOf="@id/notes_im">
-            <!--android:layout_weight=".7">-->
-
-            <TextView
-                android:id="@+id/notes"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:layout_alignTop="@+id/notes_im"
-                android:layout_toEndOf="@+id/notes_im"
-                android:text="sadf"
-                android:textAppearance="?android:attr/textAppearanceLarge" />
-        </ScrollView>
-    </RelativeLayout>
-
-
-</android.support.v4.widget.DrawerLayout>
+            android:textSize="17sp"/>
+    </ScrollView>
+</RelativeLayout>
