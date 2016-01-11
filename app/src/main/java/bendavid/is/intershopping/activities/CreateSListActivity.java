@@ -103,7 +103,7 @@ public class CreateSListActivity extends AppCompatActivity {
         }
 
         // Supermarket spinner
-        ArrayAdapter<String> supermarkedAdapter = new ArrayAdapter<>(getApplicationContext(),
+        ArrayAdapter<String> supermarkedAdapter = new ArrayAdapter<>(this,
                 R.layout.list_item_simple, smNamesList);
         supermarkedAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         supermarketInput.setAdapter(supermarkedAdapter);
