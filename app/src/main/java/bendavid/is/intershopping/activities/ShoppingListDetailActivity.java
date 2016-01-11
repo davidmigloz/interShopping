@@ -61,7 +61,6 @@ public class ShoppingListDetailActivity extends AppCompatActivity {
 
         // Show the data of the shopping list
         showShoppingListData();
-
     }
 
     /**

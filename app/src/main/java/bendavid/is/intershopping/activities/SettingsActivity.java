@@ -59,7 +59,7 @@ public class SettingsActivity extends AppCompatActivity {
 //        final Languages language = new Languages("Polish");
 
         // Supermarket spinner
-        ArrayAdapter<String> languageAdapter = new ArrayAdapter<>(getApplicationContext(),
+        ArrayAdapter<String> languageAdapter = new ArrayAdapter<>(this,
                 R.layout.list_item_simple, language.getLanguageList());
         languageAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         selectLanguageSpinner.setAdapter(languageAdapter);

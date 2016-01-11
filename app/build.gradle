@@ -32,5 +32,6 @@ dependencies {
     compile 'com.github.satyan:sugar:1.4' // ORM
     compile 'com.getbase:floatingactionbutton:1.10.1' // Floating button
     compile 'com.github.PhilJay:MPAndroidChart:v2.1.6' // Charts
-    compile 'com.google.android.gms:play-services-appindexing:8.1.0'
+//    compile 'com.google.android.gms:play-services-appindexing:8.1.0'
+//    compile 'com.google.android.gms:play-services:8.4.0'
 }

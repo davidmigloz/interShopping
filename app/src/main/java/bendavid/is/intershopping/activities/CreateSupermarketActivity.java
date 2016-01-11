@@ -7,6 +7,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.EditText;
@@ -55,9 +56,11 @@ public class CreateSupermarketActivity extends AppCompatActivity {
         final EditText newSmAdd = (EditText) findViewById(R.id.newaddress);
         final EditText newSmNote = (EditText) findViewById(R.id.newnote);
 
-        if (isNotEmpty(newSmName) && isNotEmpty(newSmAdd) && isNotEmpty(newSmNote)) {
-
-            Supermarket newSm = new Supermarket(newSmName.getText().toString(), newSmAdd.getText().toString(), newSmNote.getText().toString());
+        if (isNotEmpty(newSmName) && isNotEmpty(newSmAdd) && isNotEmpty(newSmNote) && isTooLong(newSmName)) {
+            String smName = newSmName.getText().toString().replace("\n", " ");
+            String smAdd = newSmAdd.getText().toString().replace("\n", " ");
+            Supermarket newSm = new Supermarket(smName, smAdd, newSmNote.getText().toString());
+            Log.d("notes: ", newSmNote.getText().toString());
             newSm.save();
 
             Toast.makeText(getApplicationContext(),
@@ -75,6 +78,15 @@ public class CreateSupermarketActivity extends AppCompatActivity {
     private boolean isNotEmpty(EditText etText) {
         if (etText.getText().toString().trim().length() == 0) {
             etText.setError("This field cannot be empty!");
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    private boolean isTooLong(EditText etText) {
+        if (etText.getText().toString().trim().length() >= 50) {
+            etText.setError("This field is too long! Maximum: 50 letters!");
             return false;
         } else {
             return true;

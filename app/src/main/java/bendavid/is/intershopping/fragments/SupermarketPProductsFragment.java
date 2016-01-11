@@ -53,14 +53,12 @@ public class SupermarketPProductsFragment extends Fragment {
         List<ShoppingList> allShoppingLists = ShoppingList.listAll(ShoppingList.class);
         List<ShoppingList> filteredShoppingLists = new ArrayList<ShoppingList>();
         Collections.sort(allShoppingLists, Collections.reverseOrder());
+
         for (ShoppingList shoppingList : allShoppingLists) {
             if (shoppingList.getSupermarked().getId() == supermarketID) {
                 filteredShoppingLists.add(shoppingList);
             }
         }
-//        List<ShoppingList> shoppingLists = ShoppingList.findWithQuery(ShoppingList.class, "slelect * from Supermarket where supermarket = ?",
-//                List<ShoppingList> shoppingLists = ShoppingList.find(ShoppingList.class, "supermarket = ?",Supermarket.first(Supermarket.class).getId());
-//                getIntent().getExtras().getSerializable("supermarket-id"));
 //         LinearLayoutManager provides a similar implementation to a ListView
         recyclerView.setLayoutManager(new LinearLayoutManager(recyclerView.getContext()));
         final ShoppingListRecyclerViewAdapter adapter = new ShoppingListRecyclerViewAdapter(
