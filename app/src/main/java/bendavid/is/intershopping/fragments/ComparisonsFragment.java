@@ -1,5 +1,6 @@
 package bendavid.is.intershopping.fragments;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -8,6 +9,7 @@ import android.support.v7.widget.CardView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -82,6 +84,13 @@ public class ComparisonsFragment extends Fragment {
         List<ListItem> result = selectSLInRange.list();
 
         if (result.size() > 0) {
+            // close keyboard
+            View view = this.getView();
+            if (view != null) {
+                InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+            }
+
             final ListItem lowest = result.get(0);
             supermarketText.setText(lowest.getShoppingList().getSupermarked().toString());
             dateText.setText(lowest.getShoppingList().toString());
@@ -108,10 +117,10 @@ public class ComparisonsFragment extends Fragment {
     private void drawChart(List<ListItem> result, String product) {
         Map<String, Float> supermarketsAveragePrice = new HashMap<>();
         Map<String, Integer> supermarketNumItems = new HashMap<>();
-        for(ListItem li : result){
+        for (ListItem li : result) {
             String sm = li.getShoppingList().getSupermarked().toString();
             Float price = li.getPrice();
-            if(supermarketsAveragePrice.containsKey(sm)){
+            if (supermarketsAveragePrice.containsKey(sm)) {
                 Float sum = supermarketsAveragePrice.get(sm) + price;
                 supermarketsAveragePrice.put(sm, sum);
                 Integer numItems = supermarketNumItems.get(sm) + 1;
@@ -122,7 +131,7 @@ public class ComparisonsFragment extends Fragment {
             }
         }
         // Calculate average
-        for(String sm : supermarketsAveragePrice.keySet()){
+        for (String sm : supermarketsAveragePrice.keySet()) {
             Float avg = supermarketsAveragePrice.get(sm) / supermarketNumItems.get(sm);
             supermarketsAveragePrice.put(sm, avg);
         }
@@ -131,7 +140,7 @@ public class ComparisonsFragment extends Fragment {
         ArrayList<BarEntry> entries = new ArrayList<>();
         ArrayList<String> labels = new ArrayList<>();
         int i = 0;
-        for(String sm : supermarketsAveragePrice.keySet()){
+        for (String sm : supermarketsAveragePrice.keySet()) {
             entries.add(new BarEntry(supermarketsAveragePrice.get(sm), i++));
             labels.add(sm);
         }

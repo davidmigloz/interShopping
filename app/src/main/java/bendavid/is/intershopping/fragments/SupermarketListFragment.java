@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -13,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.List;
 
@@ -20,6 +22,7 @@ import bendavid.is.intershopping.R;
 import bendavid.is.intershopping.activities.CreateSupermarketActivity;
 import bendavid.is.intershopping.activities.InterShoppingActivity;
 import bendavid.is.intershopping.activities.SupermarketDetailActivity;
+import bendavid.is.intershopping.entities.ShoppingList;
 import bendavid.is.intershopping.entities.Supermarket;
 
 /**
@@ -59,7 +62,7 @@ public class SupermarketListFragment extends Fragment {
 
                     @Override
                     public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
-                        adapter.onItemDismiss(viewHolder.getAdapterPosition());
+                        adapter.onItemDismiss(getActivity(), viewHolder.getAdapterPosition());
                     }
                 });
         mIth.attachToRecyclerView(recyclerView);
@@ -129,7 +132,7 @@ public class SupermarketListFragment extends Fragment {
         @Override
         public void onBindViewHolder(final ViewHolder viewHolder, final int position) {
             // Supermarket letter
-            viewHolder.letter.setText(supermarkets.get(position).toString().substring(0,1).toUpperCase());
+            viewHolder.letter.setText(supermarkets.get(position).toString().substring(0, 1).toUpperCase());
             // Supermarket name
             viewHolder.supermarketName.setText(supermarkets.get(position).toString());
             // Location
@@ -149,10 +152,14 @@ public class SupermarketListFragment extends Fragment {
         /**
          * When a supermarket is removed, delete it from database.
          */
-        public void onItemDismiss(int position) {
-            supermarkets.get(position).delete();
-            supermarkets.remove(position);
-            notifyItemRemoved(position);
+        public void onItemDismiss(FragmentActivity activity, int position) {
+            if (ShoppingList.find(ShoppingList.class, "Supermarket = ?", String.valueOf(supermarkets.get(position).getId())).isEmpty()) {
+                supermarkets.get(position).delete();
+                supermarkets.remove(position);
+                notifyItemRemoved(position);
+            } else {
+                Toast.makeText(activity, "Cannot delete Supermarket - Delete first relating Shoppinglists.", Toast.LENGTH_SHORT).show();
+            }
         }
 
         /**

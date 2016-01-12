@@ -27,6 +27,8 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -50,6 +52,7 @@ import bendavid.is.intershopping.entities.Languages;
 import bendavid.is.intershopping.entities.ListItem;
 import bendavid.is.intershopping.entities.ShoppingList;
 import bendavid.is.intershopping.entities.Supermarket;
+import bendavid.is.intershopping.entities.YandexResponseGson;
 
 
 /**
@@ -292,28 +295,25 @@ public class CreateSListActivity extends AppCompatActivity {
             while ((nextLine = reader.readLine()) != null) {
                 sb.append(nextLine);
             }
-
             json = sb.toString();
+            Log.d("json", json);
 
-            try {
-                jobj = new JSONObject(json);
-                int code = Integer.parseInt(jobj.getString("code")); // yandex
-                if (code == 200 || code == 201) {
-                    translatedText = jobj.getString("text");// yandex
-                    translatedText = translatedText.substring(2, translatedText.length() - 2);
-                    Log.d(translatedText, translatedText);
-                } else saveWithoutTranslation();
-            } catch (NumberFormatException | JSONException e) {
-                e.printStackTrace();
+            Gson gson = new Gson();
+            YandexResponseGson yandexResponseGson = gson.fromJson(json, YandexResponseGson.class);
+            Log.d("YandexResponseGson:", yandexResponseGson.getText().get(0));
+
+            if (yandexResponseGson.getCode() == 200 || yandexResponseGson.getCode() == 201) {
+                translatedText = yandexResponseGson.getText().get(0); // yandex
+            } else
                 saveWithoutTranslation();
-            }
+
         } catch (Exception e) {
             e.printStackTrace();
             saveWithoutTranslation();
         } finally {
             urlConnection.disconnect();
         }
-        Log.d("json", json);
+
         return translatedText;
     }
 
