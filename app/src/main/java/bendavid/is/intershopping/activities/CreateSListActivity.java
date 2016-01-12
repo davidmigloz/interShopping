@@ -13,7 +13,6 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -27,18 +26,6 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.gson.Gson;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.BufferedInputStream;
-import java.io.BufferedReader;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.net.URLEncoder;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -48,12 +35,11 @@ import java.util.List;
 
 import bendavid.is.intershopping.R;
 import bendavid.is.intershopping.entities.AppConfig;
-import bendavid.is.intershopping.entities.Languages;
+import bendavid.is.intershopping.translation.Languages;
 import bendavid.is.intershopping.entities.ListItem;
 import bendavid.is.intershopping.entities.ShoppingList;
 import bendavid.is.intershopping.entities.Supermarket;
-import bendavid.is.intershopping.entities.YandexResponseGson;
-
+import bendavid.is.intershopping.translation.YandexTranslator;
 
 /**
  * Create new shopping list.
@@ -194,12 +180,14 @@ public class CreateSListActivity extends AppCompatActivity {
                             String translatedText;
                             for (String item : newItems) {
                                 try {
-                                    translatedText = translate(item);
+                                    Languages language = new Languages(AppConfig.first(AppConfig.class).getLanguage());
+                                    YandexTranslator translator = new YandexTranslator(language.getCode());
+                                    translatedText = translator.translate(item);
+                                    new ListItem(item, translatedText, newSL).save();
                                 } catch (Exception e) {
                                     e.printStackTrace();
-                                    translatedText = e.toString();
+                                    saveWithoutTranslation();
                                 }
-                                new ListItem(item, translatedText, newSL).save();
                             }
                             newSL.updateItemsInfo();
                             newSL.save();
@@ -275,50 +263,9 @@ public class CreateSListActivity extends AppCompatActivity {
                 });
     }
 
-    public String translate(String text) throws Exception {
-        JSONObject jobj;
-        String json = "", translatedText = "";
-        text = URLEncoder.encode(text, "utf-8");
-        Languages language = new Languages(AppConfig.first(AppConfig.class).getLanguage());
-        String lang = language.getCode();
-        URL url = new URL("https://translate.yandex.net/api/v1.5/tr.json/translate?" +
-                "key=" + "trnsl.1.1.20160107T140340Z.3a9a6b4696483460.12c87164fd285e07c39ff4fde63b5c98feef6dd4" +
-                "&text=" + text +
-                "&lang=" + lang);
-        HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
-        try {
-            InputStream in = new BufferedInputStream(urlConnection.getInputStream());
-            StringBuilder sb = new StringBuilder();
-            BufferedReader reader = new BufferedReader(new InputStreamReader(in));
-
-            String nextLine;
-            while ((nextLine = reader.readLine()) != null) {
-                sb.append(nextLine);
-            }
-            json = sb.toString();
-            Log.d("json", json);
-
-            Gson gson = new Gson();
-            YandexResponseGson yandexResponseGson = gson.fromJson(json, YandexResponseGson.class);
-            Log.d("YandexResponseGson:", yandexResponseGson.getText().get(0));
-
-            if (yandexResponseGson.getCode() == 200 || yandexResponseGson.getCode() == 201) {
-                translatedText = yandexResponseGson.getText().get(0); // yandex
-            } else
-                saveWithoutTranslation();
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            saveWithoutTranslation();
-        } finally {
-            urlConnection.disconnect();
-        }
-
-        return translatedText;
-    }
-
     void saveWithoutTranslation() {
         ShoppingList newSL = new ShoppingList(date, supermarket);
+        newSL.updateItemsInfo();
         newSL.save();
         for (String item : newItems) {
             new ListItem(item, newSL).save();

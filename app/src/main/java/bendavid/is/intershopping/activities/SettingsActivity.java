@@ -14,7 +14,7 @@ import android.widget.Spinner;
 
 import bendavid.is.intershopping.R;
 import bendavid.is.intershopping.entities.AppConfig;
-import bendavid.is.intershopping.entities.Languages;
+import bendavid.is.intershopping.translation.Languages;
 
 /**
  * Create new shopping list.

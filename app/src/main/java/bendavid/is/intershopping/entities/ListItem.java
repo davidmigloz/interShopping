@@ -13,7 +13,7 @@ public class ListItem extends SugarRecord {
     private PriceType priceType;
     private long quantity;
     private ShoppingList shoppingList;
-    private boolean purchased;
+    private boolean purchased, translated;
 
     public ListItem() {
     }
@@ -22,6 +22,7 @@ public class ListItem extends SugarRecord {
         this.name = name;
         this.shoppingList = shoppingList;
         this.purchased = false;
+        this.translated = false;
     }
 
     public ListItem(String name, String translation, ShoppingList shoppingList) {
@@ -29,6 +30,7 @@ public class ListItem extends SugarRecord {
         this.translation = translation;
         this.shoppingList = shoppingList;
         this.purchased = false;
+        this.translated = true;
     }
 
     public String getName() {
@@ -42,13 +44,18 @@ public class ListItem extends SugarRecord {
             return "-";
     }
 
+    public boolean isTranslated() {
+        return translated;
+    }
+
     public float getPrice() {
         return price;
     }
 
-    public float getTotalPrice(){
+    public float getTotalPrice() {
         return price * quantity;
     }
+
     public PriceType getPriceType() {
         return priceType;
     }
@@ -65,11 +72,16 @@ public class ListItem extends SugarRecord {
         this.purchased = purchased;
     }
 
-    public void buy(float price, PriceType priceType, long quantity){
+    public void buy(float price, PriceType priceType, long quantity) {
         this.price = price;
         this.priceType = priceType;
         this.quantity = quantity;
         this.purchased = true;
+    }
+
+    public void setTranslation(String translation) {
+        this.translation = translation;
+        this.translated = true;
     }
 
 
