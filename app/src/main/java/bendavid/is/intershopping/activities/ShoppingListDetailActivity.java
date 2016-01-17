@@ -362,6 +362,7 @@ public class ShoppingListDetailActivity extends AppCompatActivity {
             itemslist.get(position).delete();
             itemslist.remove(position);
             notifyItemRemoved(position);
+            updateSLInfo();
         }
 
         /**
