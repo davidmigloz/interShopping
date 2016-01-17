@@ -82,6 +82,16 @@ public class ShoppingListDetailActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    public void onBackPressed() {
+        RelativeLayout modal = (RelativeLayout) findViewById(R.id.price_modal);
+        if (modal.isShown()) {
+            modal.setVisibility(View.GONE);
+        } else {
+            this.finish();
+        }
+    }
+
     /**
      * Setup left menu.
      */
