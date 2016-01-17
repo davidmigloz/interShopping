@@ -34,6 +34,7 @@
                 android:layout_height="wrap_content"
                 android:layout_toLeftOf="@+id/search_icon"
                 android:layout_toRightOf="@id/label"
+                android:imeOptions="actionSearch"
                 android:inputType="text"
                 android:singleLine="true"/>
 

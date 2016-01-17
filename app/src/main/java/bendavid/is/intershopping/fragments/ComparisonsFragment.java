@@ -51,7 +51,7 @@ public class ComparisonsFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(
+        final View view = inflater.inflate(
                 R.layout.comparisons, container, false);
 
         ImageView searchButton = (ImageView) view.findViewById(R.id.search_icon);
@@ -67,6 +67,13 @@ public class ComparisonsFragment extends Fragment {
 
         searchButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
+                // close keyboard
+                if (view != null) {
+                    InputMethodManager imm = (InputMethodManager) getActivity()
+                            .getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+                }
+                // Search product
                 String product = String.valueOf(input.getText());
                 if (product != null && !product.equals("")) {
                     searchProduct(product);
@@ -84,13 +91,6 @@ public class ComparisonsFragment extends Fragment {
         List<ListItem> result = selectSLInRange.list();
 
         if (result.size() > 0) {
-            // close keyboard
-            View view = this.getView();
-            if (view != null) {
-                InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-                imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
-            }
-
             final ListItem lowest = result.get(0);
             supermarketText.setText(lowest.getShoppingList().getSupermarked().toString());
             dateText.setText(lowest.getShoppingList().toString());
