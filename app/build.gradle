@@ -33,6 +33,5 @@ dependencies {
     compile 'com.getbase:floatingactionbutton:1.10.1' // Floating button
     compile 'com.github.PhilJay:MPAndroidChart:v2.1.6' // Charts
     compile 'com.google.code.gson:gson:2.3' // GSON
-//    compile 'com.google.android.gms:play-services-appindexing:8.1.0'
-//    compile 'com.google.android.gms:play-services:8.4.0'
+    androidTestCompile 'com.jayway.android.robotium:robotium-solo:5.5.3' // Robotium
 }
