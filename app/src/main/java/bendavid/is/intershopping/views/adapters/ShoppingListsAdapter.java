@@ -16,6 +16,7 @@ import java.util.Collections;
 import java.util.List;
 
 import bendavid.is.intershopping.R;
+import bendavid.is.intershopping.models.entities.ListItem;
 import bendavid.is.intershopping.models.entities.ShoppingList;
 import bendavid.is.intershopping.utils.ItemTouchHelperAdapter;
 import bendavid.is.intershopping.utils.ItemTouchHelperViewHolder;
@@ -59,6 +60,12 @@ public class ShoppingListsAdapter extends RecyclerView.Adapter<ShoppingListsAdap
 
     @Override
     public void onItemDismiss(int position) {
+        // Get items of the shopping list
+        List<ListItem> listItems = ListItem.find(ListItem.class,
+                "shopping_list = ?", shoppingLists.remove(position).getId().toString());
+        for(ListItem item : listItems){
+            item.delete();
+        }
         ShoppingList s = shoppingLists.remove(position);
         s.delete();
         notifyItemRemoved(position);

@@ -43,7 +43,7 @@ public class BackgroundTranslation extends AsyncTask<Void, Void, Void> {
     @Override
     protected void onPostExecute(Void result) {
         super.onPostExecute(result);
-        if (translated){
+        if (translated) {
             Toast.makeText(context, "Translation successful!", Toast.LENGTH_SHORT).show();
         } else {
             Toast.makeText(context, "Translation error!", Toast.LENGTH_SHORT).show();

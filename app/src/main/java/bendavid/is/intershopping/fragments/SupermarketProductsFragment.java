@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -33,12 +34,21 @@ public class SupermarketProductsFragment extends Fragment implements ShoppingLis
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity().getBaseContext());
         recyclerView.setLayoutManager(linearLayoutManager);
 
+        // Get ShoppingList-ID
+        long supermarketID = getArguments().getLong("supermarket-id");
         // Get Shopping lists
         List<ShoppingList> shoppingLists = ShoppingList.listAll(ShoppingList.class);
+        List<ShoppingList> filteredShoppingLists = new ArrayList<>();
         Collections.sort(shoppingLists, Collections.reverseOrder());
 
+        for (ShoppingList shoppingList : shoppingLists) {
+            if (shoppingList.getSupermarked().getId() == supermarketID) {
+                filteredShoppingLists.add(shoppingList);
+            }
+        }
+
         // Set adapter
-        ShoppingListsAdapter adapter = new ShoppingListsAdapter(shoppingLists, this);
+        ShoppingListsAdapter adapter = new ShoppingListsAdapter(filteredShoppingLists, this);
         recyclerView.setAdapter(adapter);
 
         // Swipe and drag
@@ -51,10 +61,10 @@ public class SupermarketProductsFragment extends Fragment implements ShoppingLis
         return view;
     }
 
-        @Override
-        public void onClick(ShoppingList shoppingList) {
-            Intent i = new Intent(getActivity(), ShoppingListDetailActivity.class);
-            i.putExtra("shopping-list-id", shoppingList.getId());
-            startActivity(i);
-        }
+    @Override
+    public void onClick(ShoppingList shoppingList) {
+        Intent i = new Intent(getActivity(), ShoppingListDetailActivity.class);
+        i.putExtra("shopping-list-id", shoppingList.getId());
+        startActivity(i);
+    }
 }

@@ -65,7 +65,7 @@ public class InterShoppingActivity extends AppCompatActivity {
         fab.hide();
 
         // Fill database with sample data
-        InitializeDatabase.initialize();
+        //InitializeDatabase.initialize();
 
         // Get
         Intent intent = getIntent();
