@@ -23,6 +23,7 @@ public class ListItem extends SugarRecord {
         this.shoppingList = shoppingList;
         this.purchased = false;
         this.translated = false;
+        this.translation = "-";
     }
 
     public ListItem(String name, String translation, ShoppingList shoppingList) {
