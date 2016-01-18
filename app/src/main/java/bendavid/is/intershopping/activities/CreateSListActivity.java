@@ -189,7 +189,6 @@ public class CreateSListActivity extends AppCompatActivity {
                                     saveWithoutTranslation();
                                 }
                             }
-                            newSL.save();
                             newSL.updateItemsInfo();
                             newSL.save();
                             return null;
