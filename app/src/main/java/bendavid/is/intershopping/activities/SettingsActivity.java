@@ -13,8 +13,8 @@ import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 
 import bendavid.is.intershopping.R;
-import bendavid.is.intershopping.entities.AppConfig;
-import bendavid.is.intershopping.translation.Languages;
+import bendavid.is.intershopping.models.entities.AppConfig;
+import bendavid.is.intershopping.models.translation.Languages;
 
 /**
  * Create new shopping list.

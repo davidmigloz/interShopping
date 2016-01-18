@@ -36,7 +36,7 @@ import java.util.Map;
 
 import bendavid.is.intershopping.R;
 import bendavid.is.intershopping.activities.SupermarketDetailActivity;
-import bendavid.is.intershopping.entities.ListItem;
+import bendavid.is.intershopping.models.entities.ListItem;
 
 public class ComparisonsFragment extends Fragment {
     private CardView card;

@@ -33,13 +33,13 @@
             android:value="intershopping.db" />
         <meta-data
             android:name="VERSION"
-            android:value="2.6" />
+            android:value="2.7" />
         <meta-data
             android:name="QUERY_LOG"
             android:value="true" />
         <meta-data
             android:name="DOMAIN_PACKAGE_NAME"
-            android:value="bendavid.is.intershopping.entities" />
+            android:value="bendavid.is.intershopping.models.entities" />
 
         <activity android:name=".activities.InterShoppingActivity">
             <intent-filter>

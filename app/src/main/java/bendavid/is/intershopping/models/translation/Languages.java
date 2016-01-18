@@ -1,4 +1,4 @@
-package bendavid.is.intershopping.translation;
+package bendavid.is.intershopping.models.translation;
 
 import android.util.Log;
 

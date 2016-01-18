@@ -1,4 +1,4 @@
-package bendavid.is.intershopping.database;
+package bendavid.is.intershopping.utils;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -7,10 +7,10 @@ import java.util.Date;
 import java.util.List;
 import java.util.Random;
 
-import bendavid.is.intershopping.entities.AppConfig;
-import bendavid.is.intershopping.entities.ListItem;
-import bendavid.is.intershopping.entities.ShoppingList;
-import bendavid.is.intershopping.entities.Supermarket;
+import bendavid.is.intershopping.models.entities.AppConfig;
+import bendavid.is.intershopping.models.entities.ListItem;
+import bendavid.is.intershopping.models.entities.ShoppingList;
+import bendavid.is.intershopping.models.entities.Supermarket;
 
 public final class InitializeDatabase {
     private static InitializeDatabase instance = null;

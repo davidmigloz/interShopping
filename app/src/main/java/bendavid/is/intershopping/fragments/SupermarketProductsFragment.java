@@ -10,7 +10,6 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,7 +24,7 @@ import java.util.List;
 
 import bendavid.is.intershopping.R;
 import bendavid.is.intershopping.activities.ShoppingListDetailActivity;
-import bendavid.is.intershopping.entities.ShoppingList;
+import bendavid.is.intershopping.models.entities.ShoppingList;
 
 /**
  * Show a list with all the shopping lists stored in the data base.

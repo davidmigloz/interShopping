@@ -36,7 +36,7 @@ import java.util.List;
 import java.util.Map;
 
 import bendavid.is.intershopping.R;
-import bendavid.is.intershopping.entities.ShoppingList;
+import bendavid.is.intershopping.models.entities.ShoppingList;
 
 import static java.util.Calendar.*;
 

@@ -1,4 +1,4 @@
-package bendavid.is.intershopping.entities;
+package bendavid.is.intershopping.models.entities;
 
 import com.orm.SugarRecord;
 

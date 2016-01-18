@@ -1,4 +1,4 @@
-package bendavid.is.intershopping.entities;
+package bendavid.is.intershopping.models.entities;
 
 import com.orm.SugarRecord;
 
@@ -50,7 +50,7 @@ public class ShoppingList extends SugarRecord implements Serializable, Comparabl
 
     public void updateItemsInfo(){
         // Get items of the shopping list
-        List<ListItem> listItems = ListItem.find(ListItem.class,
+        List<ListItem> listItems = find(ListItem.class,
                 "shopping_list = ?", this.getId().toString());
         numItems = 0;
         numItemsBought = 0;

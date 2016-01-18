@@ -42,7 +42,7 @@
                 <include layout="@layout/list_shopping_lists_item" />
 
                 <android.support.v7.widget.RecyclerView
-                    android:id="@+id/recyclerview"
+                    android:id="@+id/items_list"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_below="@id/cv"
@@ -156,7 +156,6 @@
                 </RelativeLayout>
             </RelativeLayout>
         </FrameLayout>
-
 
     </android.support.design.widget.CoordinatorLayout>
 

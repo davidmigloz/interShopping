@@ -4,41 +4,30 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import bendavid.is.intershopping.R;
-import bendavid.is.intershopping.database.InitializeDatabase;
-import bendavid.is.intershopping.entities.AppConfig;
-import bendavid.is.intershopping.entities.ListItem;
-import bendavid.is.intershopping.entities.ShoppingList;
 import bendavid.is.intershopping.fragments.ShoppingListFragment;
 import bendavid.is.intershopping.fragments.SupermarketListFragment;
-import bendavid.is.intershopping.translation.Languages;
-import bendavid.is.intershopping.translation.YandexTranslator;
+import bendavid.is.intershopping.network.BackgroundTranslation;
+import bendavid.is.intershopping.utils.InitializeDatabase;
+import bendavid.is.intershopping.views.adapters.TabsAdapter;
 
 public class InterShoppingActivity extends AppCompatActivity {
-    private DrawerLayout mDrawerLayout;
     public FloatingActionButton fab;
+    private DrawerLayout mDrawerLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,6 +66,11 @@ public class InterShoppingActivity extends AppCompatActivity {
 
         // Fill database with sample data
         InitializeDatabase.initialize();
+
+        // Get
+        Intent intent = getIntent();
+        int tab = intent.getIntExtra("tab", 0);
+        viewPager.setCurrentItem(tab);
     }
 
     /**
@@ -120,58 +114,8 @@ public class InterShoppingActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private void translateUntranslated() {
-
-
-        // Check connection
-        ConnectivityManager connMgr = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
-        final boolean[] translated = {true};
-        if (networkInfo != null && networkInfo.isConnected()) {
-
-            //we are connected to a network
-            class backgroundTranslation extends AsyncTask<Void, Void, Void> {
-                @Override
-                protected Void doInBackground(Void... params) {
-//                    List<ListItem> listItems = ListItem.find(ListItem.class, "translated = ?", "false");
-                    List<ListItem> listItems = ListItem.listAll(ListItem.class);
-                    for (ListItem listItem : listItems) {
-                        if (!listItem.isTranslated()) {
-                            try {
-                                Languages language = new Languages(AppConfig.first(AppConfig.class).getLanguage());
-                                YandexTranslator translator = new YandexTranslator(language.getCode());
-                                listItem.setTranslation(translator.translate(listItem.getName()));
-                                listItem.save();
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                                translated[0] = false;
-                                Toast.makeText(getApplicationContext(), "Translation Error!", Toast.LENGTH_SHORT).show();
-                                return null;
-                            }
-                        }
-                    }
-                    return null;
-                }
-
-                @Override
-                protected void onPostExecute(Void result) {
-                    if (translated[0])
-                        Toast.makeText(getApplicationContext(), "...Translation successful.", Toast.LENGTH_SHORT).show();
-                    super.onPostExecute(result);
-                }
-            }
-            Toast.makeText(getApplicationContext(),
-                    "The automatic translation takes a while...", Toast.LENGTH_SHORT).show();
-            new backgroundTranslation().execute();
-
-        } else {
-            Toast.makeText(getApplicationContext(),
-                    "No Internet Connection!", Toast.LENGTH_SHORT).show();
-        }
-    }
-
     private void setupViewPager(ViewPager viewPager) {
-        Adapter adapter = new Adapter(getSupportFragmentManager());
+        TabsAdapter adapter = new TabsAdapter(getSupportFragmentManager());
         adapter.addFragment(new ShoppingListFragment(), "ShoppingLists");
         adapter.addFragment(new SupermarketListFragment(), "Supermarkets");
         viewPager.setAdapter(adapter);
@@ -192,32 +136,18 @@ public class InterShoppingActivity extends AppCompatActivity {
                 });
     }
 
-    static class Adapter extends FragmentPagerAdapter {
-        private final List<Fragment> mFragments = new ArrayList<>();
-        private final List<String> mFragmentTitles = new ArrayList<>();
-
-        public Adapter(FragmentManager fm) {
-            super(fm);
-        }
-
-        public void addFragment(Fragment fragment, String title) {
-            mFragments.add(fragment);
-            mFragmentTitles.add(title);
-        }
-
-        @Override
-        public Fragment getItem(int position) {
-            return mFragments.get(position);
-        }
-
-        @Override
-        public int getCount() {
-            return mFragments.size();
-        }
-
-        @Override
-        public CharSequence getPageTitle(int position) {
-            return mFragmentTitles.get(position);
+    private void translateUntranslated() {
+        // Check connection
+        ConnectivityManager connMgr = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
+        if (networkInfo != null && networkInfo.isConnected()) {
+            //w e are connected to a network
+            Toast.makeText(getApplicationContext(),
+                    "Translating...", Toast.LENGTH_SHORT).show();
+            new BackgroundTranslation(this).execute();
+        } else {
+            Toast.makeText(getApplicationContext(),
+                    "No Internet Connection!", Toast.LENGTH_SHORT).show();
         }
     }
 }

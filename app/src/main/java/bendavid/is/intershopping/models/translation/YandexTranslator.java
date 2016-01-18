@@ -1,4 +1,4 @@
-package bendavid.is.intershopping.translation;
+package bendavid.is.intershopping.models.translation;
 
 import android.util.Log;
 
@@ -13,11 +13,6 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
 
-import bendavid.is.intershopping.entities.AppConfig;
-
-/**
- * Created by Benni on 12.01.2016.
- */
 public class YandexTranslator {
 
 
@@ -31,7 +26,7 @@ public class YandexTranslator {
     }
 
     public String translate(String textToTranslate) throws Exception {
-        String json = "", translatedText = "";
+        String json, translatedText = "";
         textToTranslate = URLEncoder.encode(textToTranslate, "utf-8");
         URL url = new URL("https://translate.yandex.net/api/v1.5/tr.json/translate?" +
                 "key=" + "trnsl.1.1.20160107T140340Z.3a9a6b4696483460.12c87164fd285e07c39ff4fde63b5c98feef6dd4" +

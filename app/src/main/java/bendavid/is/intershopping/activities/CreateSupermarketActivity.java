@@ -14,7 +14,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import bendavid.is.intershopping.R;
-import bendavid.is.intershopping.entities.Supermarket;
+import bendavid.is.intershopping.models.entities.Supermarket;
 
 /**
  * Create new shopping list.
@@ -66,6 +66,7 @@ public class CreateSupermarketActivity extends AppCompatActivity {
             Toast.makeText(getApplicationContext(),
                     "New Supermarket saved.", Toast.LENGTH_SHORT).show();
             Intent intent = new Intent(CreateSupermarketActivity.this, InterShoppingActivity.class);
+            intent.putExtra("tab", 1);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(intent);
         } else {

@@ -1,6 +1,5 @@
 package bendavid.is.intershopping.activities;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
@@ -19,7 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import bendavid.is.intershopping.R;
-import bendavid.is.intershopping.entities.Supermarket;
+import bendavid.is.intershopping.models.entities.Supermarket;
 import bendavid.is.intershopping.fragments.SupermarketInfoFragment;
 import bendavid.is.intershopping.fragments.SupermarketProductsFragment;
 

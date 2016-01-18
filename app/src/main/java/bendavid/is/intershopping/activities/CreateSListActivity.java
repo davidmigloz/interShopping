@@ -34,12 +34,12 @@ import java.util.Date;
 import java.util.List;
 
 import bendavid.is.intershopping.R;
-import bendavid.is.intershopping.entities.AppConfig;
-import bendavid.is.intershopping.translation.Languages;
-import bendavid.is.intershopping.entities.ListItem;
-import bendavid.is.intershopping.entities.ShoppingList;
-import bendavid.is.intershopping.entities.Supermarket;
-import bendavid.is.intershopping.translation.YandexTranslator;
+import bendavid.is.intershopping.models.entities.AppConfig;
+import bendavid.is.intershopping.models.entities.ListItem;
+import bendavid.is.intershopping.models.entities.ShoppingList;
+import bendavid.is.intershopping.models.entities.Supermarket;
+import bendavid.is.intershopping.models.translation.Languages;
+import bendavid.is.intershopping.models.translation.YandexTranslator;
 
 /**
  * Create new shopping list.
@@ -162,7 +162,7 @@ public class CreateSListActivity extends AppCompatActivity {
     private void addSList() {
         if (submitted) {
             Toast.makeText(getApplicationContext(),
-                    "The automatic translation takes a while...", Toast.LENGTH_SHORT).show();
+                    "Tranlating...", Toast.LENGTH_SHORT).show();
         } else {
             if (date != null && supermarket != null && newItems.size() > 0 && !submitted) {
                 submitted = true;
@@ -197,7 +197,7 @@ public class CreateSListActivity extends AppCompatActivity {
                         @Override
                         protected void onPostExecute(Void result) {
                             Toast.makeText(getApplicationContext(),
-                                    "...New Shopping List saved.", Toast.LENGTH_SHORT).show();
+                                    "New Shopping List saved", Toast.LENGTH_SHORT).show();
                             Intent intent = new Intent(CreateSListActivity.this, InterShoppingActivity.class);
                             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                             startActivity(intent);
@@ -205,7 +205,7 @@ public class CreateSListActivity extends AppCompatActivity {
                         }
                     }
                     Toast.makeText(getApplicationContext(),
-                            "The automatic translation takes a while...", Toast.LENGTH_SHORT).show();
+                            "Translating...", Toast.LENGTH_SHORT).show();
                     new backgroundTranslation().execute();
 
                 } else {
@@ -272,7 +272,7 @@ public class CreateSListActivity extends AppCompatActivity {
         }
         newSL.updateItemsInfo();
         Toast.makeText(getApplicationContext(),
-                "...New Shopping List saved without translation.", Toast.LENGTH_SHORT).show();
+                "New Shopping List saved without translation", Toast.LENGTH_SHORT).show();
         Intent intent = new Intent(CreateSListActivity.this, InterShoppingActivity.class);
         startActivity(intent);
     }
