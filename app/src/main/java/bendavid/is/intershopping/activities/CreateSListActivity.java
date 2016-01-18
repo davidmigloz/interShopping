@@ -189,6 +189,7 @@ public class CreateSListActivity extends AppCompatActivity {
                                     saveWithoutTranslation();
                                 }
                             }
+                            newSL.save();
                             newSL.updateItemsInfo();
                             newSL.save();
                             return null;
@@ -265,6 +266,7 @@ public class CreateSListActivity extends AppCompatActivity {
 
     void saveWithoutTranslation() {
         ShoppingList newSL = new ShoppingList(date, supermarket);
+        newSL.save();
         newSL.updateItemsInfo();
         newSL.save();
         for (String item : newItems) {
