@@ -162,7 +162,7 @@ public class CreateSListActivity extends AppCompatActivity {
     private void addSList() {
         if (submitted) {
             Toast.makeText(getApplicationContext(),
-                    "Tranlating...", Toast.LENGTH_SHORT).show();
+                    "Translating...", Toast.LENGTH_SHORT).show();
         } else {
             if (date != null && supermarket != null && newItems.size() > 0 && !submitted) {
                 submitted = true;
@@ -170,7 +170,6 @@ public class CreateSListActivity extends AppCompatActivity {
                 ConnectivityManager connMgr = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
                 NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
                 if (networkInfo != null && networkInfo.isConnected()) {
-
                     //we are connected to a network
                     class backgroundTranslation extends AsyncTask<Void, Void, Void> {
                         @Override
